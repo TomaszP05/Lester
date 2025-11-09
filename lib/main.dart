@@ -54,7 +54,9 @@ class _MainNavigationState extends State<MainNavigation> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_stories), label: 'Journal'),
           BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: 'Challenges'),
+          BottomNavigationBarItem(icon: Icon(Icons.mood), label: 'Mood'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
         currentIndex: _selectedIndex,
