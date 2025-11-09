@@ -32,7 +32,9 @@ class _MainNavigationState extends State<MainNavigation> {
   // These are your three basic pages
   final List<Widget> _pages = const [
     HomeScreen(),
+    JournalScreen(),
     ChallengesScreen(),
+    MoodScreen(),
     SettingsScreen(),
   ];
 
@@ -82,6 +84,33 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+class JournalScreen extends StatelessWidget {
+  const JournalScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Journal screen coming soon! 📖',
+        style: TextStyle(fontSize: 22),
+      ),
+    );
+  }
+}
+
+class MoodScreen extends StatelessWidget {
+  const MoodScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Mood tracking coming soon! 😊',
+        style: TextStyle(fontSize: 22),
+      ),
+    );
+  }
+}
 
 
 class SettingsScreen extends StatelessWidget {
