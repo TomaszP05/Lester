@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'challenges_screen.dart';
+import 'mood_screen.dart';
 
 void main() {
   runApp(const LesterApp());
@@ -92,20 +93,6 @@ class JournalScreen extends StatelessWidget {
     return const Center(
       child: Text(
         'Journal screen coming soon! 📖',
-        style: TextStyle(fontSize: 22),
-      ),
-    );
-  }
-}
-
-class MoodScreen extends StatelessWidget {
-  const MoodScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Mood tracking coming soon! 😊',
         style: TextStyle(fontSize: 22),
       ),
     );
