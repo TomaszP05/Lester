@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'challenges_screen.dart';
+import 'journal_screen.dart';
 import 'mood_screen.dart';
 
 void main() {
@@ -30,14 +31,21 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  // These are your three basic pages
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    JournalScreen(),
-    ChallengesScreen(),
-    MoodScreen(),
-    SettingsScreen(),
-  ];
+  final GlobalKey<JournalScreenState> _journalKey =
+      GlobalKey<JournalScreenState>();
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const HomeScreen(),
+      JournalScreen(key: _journalKey),
+      const ChallengesScreen(),
+      const MoodScreen(),
+      const SettingsScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -53,6 +61,12 @@ class _MainNavigationState extends State<MainNavigation> {
         centerTitle: true,
       ),
       body: _pages[_selectedIndex],
+      floatingActionButton: _selectedIndex == 1
+          ? FloatingActionButton(
+              onPressed: () => _journalKey.currentState?.openComposer(),
+              child: const Icon(Icons.add),
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -79,20 +93,6 @@ class HomeScreen extends StatelessWidget {
     return const Center(
       child: Text(
         'Welcome to Lester 🌸',
-        style: TextStyle(fontSize: 22),
-      ),
-    );
-  }
-}
-
-class JournalScreen extends StatelessWidget {
-  const JournalScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Journal screen coming soon! 📖',
         style: TextStyle(fontSize: 22),
       ),
     );
