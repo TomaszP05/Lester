@@ -5,7 +5,7 @@
 
 ## About
 
-*CSCI 2020U: System Development and Integration*
+*CSCI 4100U: Mobile Devices*
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Last Commit](https://img.shields.io/github/last-commit/TomaszP05/Lester)
