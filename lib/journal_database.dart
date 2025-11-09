@@ -66,7 +66,7 @@ class JournalDatabase {
   Future<Database> _initDB(String fileName) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, fileName);
-    return openDatabase(
+    final db = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
@@ -81,6 +81,46 @@ class JournalDatabase {
         ''');
       },
     );
+    await _ensurePresetEntries(db);
+    return db;
+  }
+
+  // Pre-set journal entries to populate on first launch.
+  Future<void> _ensurePresetEntries(Database db) async {
+    for (final entry in _presetEntries()) {
+      final countResult = await db.query(
+        'journal_entries',
+        columns: ['COUNT(*) as count'],
+        where: 'thoughts = ? AND created_at = ?',
+        whereArgs: [entry.thoughts, entry.createdAt.toIso8601String()],
+      );
+      final count = Sqflite.firstIntValue(countResult) ?? 0;
+      if (count == 0) {
+        await db.insert('journal_entries', entry.toMap());
+      }
+    }
+  }
+
+  Future<void> ensurePresetEntries() async {
+    final db = await database;
+    await _ensurePresetEntries(db);
+  }
+
+  List<JournalEntry> _presetEntries() {
+    return [
+      JournalEntry(
+        thoughts: 'Took a quiet walk and enjoyed the fresh air.',
+        feelings: 'Calm',
+        accomplishments: 'Completed my readings for class.',
+        createdAt: DateTime.utc(2025, 11, 01, 8),
+      ),
+      JournalEntry(
+        thoughts: 'Had a great chat with a friend over lunch.',
+        feelings: 'Happy',
+        accomplishments: 'Cooked a healthy meal for dinner.',
+        createdAt: DateTime.utc(2025, 10, 30, 12, 30),
+      ),
+    ];
   }
 
   Future<List<JournalEntry>> getEntries() async {

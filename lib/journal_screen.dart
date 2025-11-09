@@ -18,6 +18,7 @@ class JournalScreenState extends State<JournalScreen> {
   }
 
   Future<void> _loadEntries() async {
+    await _database.ensurePresetEntries();
     final entries = await _database.getEntries();
     if (!mounted) return;
     setState(() {
