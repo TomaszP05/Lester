@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'challenges_screen.dart';
 
 void main() {
   runApp(const LesterApp());
@@ -79,23 +80,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class ChallengesScreen extends StatelessWidget {
-  const ChallengesScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Challenge complete! ✅')),
-          );
-        },
-        child: const Text('Complete Daily Challenge'),
-      ),
-    );
-  }
-}
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
