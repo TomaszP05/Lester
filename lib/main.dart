@@ -1,7 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'challenges_screen.dart';
+import 'widgets/insights_widget.dart';
 
 void main() {
+  if (!kReleaseMode) {
+    HttpOverrides.global = _PermissiveHttpOverrides();
+  }
   runApp(const LesterApp());
 }
 
@@ -75,10 +83,27 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Welcome to Lester 🌸',
-        style: TextStyle(fontSize: 22),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome to Lester 🌸',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Here is your daily boost of inspiration and weather check-in.',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 24),
+            const InsightsWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -124,5 +149,13 @@ class SettingsScreen extends StatelessWidget {
         style: TextStyle(fontSize: 18),
       ),
     );
+  }
+}
+
+class _PermissiveHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (cert, host, port) => true;
   }
 }
