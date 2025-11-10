@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
-import 'challenges_screen.dart';
-import 'journal_screen.dart';
-import 'mood_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/challenges_screen.dart';
+import 'screens/journal_screen.dart';
+import 'screens/mood_screen.dart';
+import 'notifications/challenges_notifications.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await ChallengesNotifications.instance.initialize();
+    await ChallengesNotifications.instance.scheduleHourlyNotifications();
+  } catch (e) {
+    print('Error initializing notifications: $e');
+  }
+
   runApp(const LesterApp());
 }
 
@@ -32,14 +43,15 @@ class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
   final GlobalKey<JournalScreenState> _journalKey =
-      GlobalKey<JournalScreenState>();
+  GlobalKey<JournalScreenState>();
+  final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
   late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
     _pages = [
-      const HomeScreen(),
+      HomeScreen(key: _homeKey),
       JournalScreen(key: _journalKey),
       const ChallengesScreen(),
       const MoodScreen(),
@@ -51,6 +63,11 @@ class _MainNavigationState extends State<MainNavigation> {
     setState(() {
       _selectedIndex = index;
     });
+
+    // Refresh home screen when returning to it
+    if (index == 0) {
+      _homeKey.currentState?.loadCurrentChallenge();
+    }
   }
 
   @override
@@ -63,9 +80,9 @@ class _MainNavigationState extends State<MainNavigation> {
       body: _pages[_selectedIndex],
       floatingActionButton: _selectedIndex == 1
           ? FloatingActionButton(
-              onPressed: () => _journalKey.currentState?.openComposer(),
-              child: const Icon(Icons.add),
-            )
+        onPressed: () => _journalKey.currentState?.openComposer(),
+        child: const Icon(Icons.add),
+      )
           : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -85,30 +102,81 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Welcome to Lester 🌸',
-        style: TextStyle(fontSize: 22),
-      ),
-    );
-  }
-}
-
-
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  Future<void> _sendTestNotification(BuildContext context) async {
+    try {
+      await ChallengesNotifications.instance.sendTestNotification();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Test notification sent!'),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Error: $e'),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Settings will go here ⚙️',
-        style: TextStyle(fontSize: 18),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Settings',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Notifications',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(
+                Icons.notifications_active,
+                color: Colors.teal,
+                size: 28,
+              ),
+              title: const Text(
+                'Send Test Notification',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              subtitle: const Text('Test your notification settings'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () => _sendTestNotification(context),
+            ),
+          ),
+        ],
       ),
     );
   }

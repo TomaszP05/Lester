@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'journal_database.dart';
+import '../databases/journal_database.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'mood_database.dart';
+import '../databases/mood_database.dart';
 
 class MoodScreen extends StatefulWidget {
   const MoodScreen({super.key});
