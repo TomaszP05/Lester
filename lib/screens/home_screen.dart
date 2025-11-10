@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../databases/challenge_database.dart';
 import '../notifications/challenges_notifications.dart';
+import 'reflection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -83,13 +84,54 @@ class HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Welcome to Lester 🌸',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
+          // const Text(
+          //   'Welcome to Lester 🌸',
+          //   style: TextStyle(
+          //     fontSize: 28,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFD4F8E8), // light green background
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Welcome to Lester 🌸!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Let's log how you're feeling~ 🫧",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage('assets/LesterMascot.png'),
+                ),
+              ],
             ),
           ),
+
           const SizedBox(height: 24),
           const Text(
             'Today\'s Challenge',
@@ -122,6 +164,39 @@ class HomeScreenState extends State<HomeScreen> {
             )
           else
             _buildChallengeCard(_currentChallenge!),
+
+          const SizedBox(height: 32),
+          const Text(
+            'Weekly Reflection Quiz',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 🌸 ADD REFLECTION BUTTON
+          Center(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                backgroundColor: Colors.teal,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ReflectionScreen()),
+                );
+              },
+              icon: const Icon(Icons.self_improvement, color: Colors.white),
+              label: const Text(
+                "Start Weekly Reflection",
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
         ],
       ),
     );
