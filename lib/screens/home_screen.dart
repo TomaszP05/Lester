@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../databases/challenge_database.dart';
 import '../notifications/challenges_notifications.dart';
+import '../widgets/insights_widget.dart';
 import 'reflection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -132,6 +133,17 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
+          const SizedBox(height: 24),
+          const Text(
+            'Daily Insights',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const InsightsWidget(),
+          
           const SizedBox(height: 24),
           const Text(
             'Today\'s Challenge',

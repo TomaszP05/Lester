@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'screens/challenges_screen.dart';
@@ -7,6 +10,11 @@ import 'notifications/challenges_notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Allow HTTP connections in debug mode (for insights widget)
+  if (!kReleaseMode) {
+    HttpOverrides.global = _PermissiveHttpOverrides();
+  }
 
   try {
     await ChallengesNotifications.instance.initialize();
@@ -179,5 +187,13 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PermissiveHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (cert, host, port) => true;
   }
 }
