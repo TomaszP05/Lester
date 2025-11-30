@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'challenge_database.dart';
+import '../databases/challenge_database.dart';
 
 class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({Key? key}) : super(key: key);

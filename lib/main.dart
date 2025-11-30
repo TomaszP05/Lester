@@ -2,14 +2,27 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'screens/home_screen.dart';
+import 'screens/challenges_screen.dart';
+import 'screens/journal_screen.dart';
+import 'screens/mood_screen.dart';
+import 'notifications/challenges_notifications.dart';
 
-import 'challenges_screen.dart';
-import 'widgets/insights_widget.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  // Allow HTTP connections in debug mode (for insights widget)
   if (!kReleaseMode) {
     HttpOverrides.global = _PermissiveHttpOverrides();
   }
+
+  try {
+    await ChallengesNotifications.instance.initialize();
+    await ChallengesNotifications.instance.scheduleHourlyNotifications();
+  } catch (e) {
+    print('Error initializing notifications: $e');
+  }
+
   runApp(const LesterApp());
 }
 
@@ -37,19 +50,32 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  // These are your three basic pages
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    JournalScreen(),
-    ChallengesScreen(),
-    MoodScreen(),
-    SettingsScreen(),
-  ];
+  final GlobalKey<JournalScreenState> _journalKey =
+  GlobalKey<JournalScreenState>();
+  final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomeScreen(key: _homeKey),
+      JournalScreen(key: _journalKey),
+      const ChallengesScreen(),
+      const MoodScreen(),
+      const SettingsScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
+    // Refresh home screen when returning to it
+    if (index == 0) {
+      _homeKey.currentState?.loadCurrentChallenge();
+    }
   }
 
   @override
@@ -60,6 +86,12 @@ class _MainNavigationState extends State<MainNavigation> {
         centerTitle: true,
       ),
       body: _pages[_selectedIndex],
+      floatingActionButton: _selectedIndex == 1
+          ? FloatingActionButton(
+        onPressed: () => _journalKey.currentState?.openComposer(),
+        child: const Icon(Icons.add),
+      )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -78,75 +110,81 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome to Lester 🌸',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Here is your daily boost of inspiration and weather check-in.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 24),
-            const InsightsWidget(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class JournalScreen extends StatelessWidget {
-  const JournalScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Journal screen coming soon! 📖',
-        style: TextStyle(fontSize: 22),
-      ),
-    );
-  }
-}
-
-class MoodScreen extends StatelessWidget {
-  const MoodScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Mood tracking coming soon! 😊',
-        style: TextStyle(fontSize: 22),
-      ),
-    );
-  }
-}
-
-
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  Future<void> _sendTestNotification(BuildContext context) async {
+    try {
+      await ChallengesNotifications.instance.sendTestNotification();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Test notification sent!'),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Error: $e'),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Settings will go here ⚙️',
-        style: TextStyle(fontSize: 18),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Settings',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Notifications',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(
+                Icons.notifications_active,
+                color: Colors.teal,
+                size: 28,
+              ),
+              title: const Text(
+                'Send Test Notification',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              subtitle: const Text('Test your notification settings'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () => _sendTestNotification(context),
+            ),
+          ),
+        ],
       ),
     );
   }
