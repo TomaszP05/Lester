@@ -68,6 +68,7 @@ class _InsightsWidgetState extends State<InsightsWidget> {
       author: quoteData['author'] as String? ?? 'Unknown',
       temperature: temperature,
       weatherDescription: _weatherDescription(weatherCode),
+      weatherCode: weatherCode,
       locationLabel: widget.locationLabel,
     );
   }
@@ -86,14 +87,6 @@ class _InsightsWidgetState extends State<InsightsWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Daily Insights',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
                 Text(
                   snapshot.error.toString(),
                   style: const TextStyle(color: Colors.redAccent),
@@ -119,14 +112,6 @@ class _InsightsWidgetState extends State<InsightsWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Daily Insights',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
               _WeatherRow(data: data),
               const Divider(height: 32),
               Text(
@@ -177,12 +162,94 @@ class _InsightsWidgetState extends State<InsightsWidget> {
   }
 }
 
+// Weather utility functions
+IconData _weatherIcon(int? code) {
+  if (code == null) return Icons.wb_sunny;
+
+  // Clear or mainly clear - sunny
+  if (code == 0 || code == 1) {
+    return Icons.wb_sunny;
+  }
+  // Partly cloudy
+  if (code == 2) {
+    return Icons.cloud_queue;
+  }
+  // Overcast - cloudy
+  if (code == 3) {
+    return Icons.wb_cloudy;
+  }
+  // Fog
+  if (code == 45 || code == 48) {
+    return Icons.foggy;
+  }
+  // Drizzle or rain
+  if (code >= 51 && code <= 65) {
+    return Icons.umbrella;
+  }
+  // Snow
+  if (code >= 71 && code <= 77) {
+    return Icons.ac_unit;
+  }
+  // Rain showers
+  if (code >= 80 && code <= 82) {
+    return Icons.grain;
+  }
+  // Thunderstorm (codes 95-99)
+  if (code >= 95 && code <= 99) {
+    return Icons.thunderstorm;
+  }
+
+  // Default fallback
+  return Icons.wb_sunny;
+}
+
+Color _weatherIconColor(int? code) {
+  if (code == null) return Colors.orangeAccent;
+
+  // Clear or mainly clear - sunny (orange/yellow)
+  if (code == 0 || code == 1) {
+    return Colors.orangeAccent;
+  }
+  // Partly cloudy (light blue)
+  if (code == 2) {
+    return Colors.lightBlueAccent;
+  }
+  // Overcast - cloudy (gray)
+  if (code == 3) {
+    return Colors.grey;
+  }
+  // Fog (light gray)
+  if (code == 45 || code == 48) {
+    return Colors.grey;
+  }
+  // Drizzle or rain (blue)
+  if (code >= 51 && code <= 65) {
+    return Colors.blueAccent;
+  }
+  // Snow (light blue/cyan)
+  if (code >= 71 && code <= 77) {
+    return Colors.lightBlue;
+  }
+  // Rain showers (blue)
+  if (code >= 80 && code <= 82) {
+    return Colors.blueAccent;
+  }
+  // Thunderstorm (dark blue/purple)
+  if (code >= 95 && code <= 99) {
+    return Colors.deepPurpleAccent;
+  }
+
+  // Default fallback
+  return Colors.orangeAccent;
+}
+
 class _InsightsData {
   const _InsightsData({
     required this.quote,
     required this.author,
     required this.temperature,
     required this.weatherDescription,
+    required this.weatherCode,
     required this.locationLabel,
   });
 
@@ -190,6 +257,7 @@ class _InsightsData {
   final String author;
   final double temperature;
   final String weatherDescription;
+  final int? weatherCode;
   final String locationLabel;
 }
 
@@ -242,10 +310,10 @@ class _WeatherRow extends StatelessWidget {
             color: Colors.white.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.wb_sunny,
+          child: Icon(
+            _weatherIcon(data.weatherCode),
             size: 32,
-            color: Colors.orangeAccent,
+            color: _weatherIconColor(data.weatherCode),
           ),
         ),
         const SizedBox(width: 16),

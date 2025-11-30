@@ -134,6 +134,14 @@ class HomeScreenState extends State<HomeScreen> {
           ),
 
           const SizedBox(height: 24),
+          const Text(
+            'Daily Insights',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
           const InsightsWidget(),
           
           const SizedBox(height: 24),
