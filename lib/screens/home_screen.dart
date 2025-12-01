@@ -3,6 +3,7 @@ import '../databases/challenge_database.dart';
 import '../notifications/challenges_notifications.dart';
 import '../widgets/insights_widget.dart';
 import 'reflection_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,18 +81,12 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // const Text(
-          //   'Welcome to Lester 🌸',
-          //   style: TextStyle(
-          //     fontSize: 28,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -103,19 +98,19 @@ class HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        'Welcome to Lester 🌸!',
-                        style: TextStyle(
+                        loc?.welcomeTitle ?? 'Welcome to Lester 🌸!',
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        "Let's log how you're feeling~ 🫧",
-                        style: TextStyle(
+                        loc?.welcomeSubtitle ?? "Let's log how you're feeling~ 🧧",
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black54,
                         ),
@@ -123,20 +118,15 @@ class HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('assets/LesterMascot.png'),
-                ),
+                Image.asset('assets/LesterMascot.png', height: 60),
               ],
             ),
           ),
 
           const SizedBox(height: 24),
-          const Text(
-            'Daily Insights',
-            style: TextStyle(
+          Text(
+            loc?.dailyInsightsTitle ?? 'Daily Insights',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -145,9 +135,9 @@ class HomeScreenState extends State<HomeScreen> {
           const InsightsWidget(),
           
           const SizedBox(height: 24),
-          const Text(
-            'Today\'s Challenge',
-            style: TextStyle(
+          Text(
+            loc?.todaysChallengeTitle ?? 'Today\'s Challenge',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -167,10 +157,10 @@ class HomeScreenState extends State<HomeScreen> {
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'No challenge available for today',
-                  style: TextStyle(fontSize: 16),
+                  loc?.noChallengeMessage ?? 'No challenge available for today',
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             )
@@ -178,9 +168,9 @@ class HomeScreenState extends State<HomeScreen> {
             _buildChallengeCard(_currentChallenge!),
 
           const SizedBox(height: 32),
-          const Text(
-            'Weekly Reflection Quiz',
-            style: TextStyle(
+          Text(
+            loc?.weeklyReflectionTitle ?? 'Weekly Reflection Quiz',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -202,9 +192,9 @@ class HomeScreenState extends State<HomeScreen> {
                 );
               },
               icon: const Icon(Icons.self_improvement, color: Colors.white),
-              label: const Text(
-                "Start Weekly Reflection",
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              label: Text(
+                loc?.startWeeklyReflection ?? "Start Weekly Reflection",
+                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../l10n/app_localizations.dart';
 
 class InsightsWidget extends StatefulWidget {
   const InsightsWidget({super.key});
@@ -14,7 +15,7 @@ class _InsightsWidgetState extends State<InsightsWidget> {
   // Toronto, ON coordinates
   static const double _latitude = 43.6532;
   static const double _longitude = -79.3832;
-  static const String _locationLabel = 'Toronto, ON';
+  static const String _locationLabel = 'Toronto, ON'; // Consider localizing if needed
 
   late Future<_InsightsData> _insightsFuture;
 
@@ -44,11 +45,11 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     final weatherResponse = results[1];
 
     if (quoteResponse.statusCode != 200) {
-      throw Exception('Could not load quote. Please try again.');
+      throw Exception(AppLocalizations.of(context)?.quoteLoadError ?? 'Could not load quote. Please try again.');
     }
 
     if (weatherResponse.statusCode != 200) {
-      throw Exception('Could not load weather. Please try again.');
+      throw Exception(AppLocalizations.of(context)?.weatherLoadError ?? 'Could not load weather. Please try again.');
     }
 
     final quoteData = jsonDecode(quoteResponse.body) as Map<String, dynamic>;
@@ -60,8 +61,8 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     final weatherCode = (currentWeather['weathercode'] as num?)?.toInt();
 
     return _InsightsData(
-      quote: quoteData['content'] as String? ?? 'Stay positive and keep going.',
-      author: quoteData['author'] as String? ?? 'Unknown',
+      quote: quoteData['content'] as String? ?? (AppLocalizations.of(context)?.quoteFallback ?? 'Stay positive and keep going.'),
+      author: quoteData['author'] as String? ?? (AppLocalizations.of(context)?.unknownAuthor ?? 'Unknown'),
       temperature: temperature,
       weatherDescription: _weatherDescription(weatherCode),
       weatherCode: weatherCode,
@@ -95,7 +96,7 @@ class _InsightsWidgetState extends State<InsightsWidget> {
                     });
                   },
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Try again'),
+                  label: Text(AppLocalizations.of(context)?.tryAgain ?? 'Try again'),
                 ),
               ],
             ),

@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/challenges_screen.dart';
 import 'screens/journal_screen.dart';
 import 'screens/mood_screen.dart';
 import 'notifications/challenges_notifications.dart';
+
+final ValueNotifier<Locale?> _localeNotifier = ValueNotifier<Locale?>(null);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +35,28 @@ class LesterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lester',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.teal),
-      home: const MainNavigation(),
+    return ValueListenableBuilder<Locale?>(
+      valueListenable: _localeNotifier,
+      builder: (context, locale, _) {
+        return MaterialApp(
+          title: 'Lester',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primarySwatch: Colors.teal),
+          locale: locale,
+          supportedLocales: const [
+            Locale('en'),
+            Locale('es'),
+            Locale('fr'),
+          ],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const MainNavigation(),
+        );
+      },
     );
   }
 }
@@ -51,7 +72,7 @@ class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
   final GlobalKey<JournalScreenState> _journalKey =
-  GlobalKey<JournalScreenState>();
+      GlobalKey<JournalScreenState>();
   final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
   late final List<Widget> _pages;
 
@@ -80,26 +101,27 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lester'),
+        title: Text(loc?.appTitle ?? 'Lester'),
         centerTitle: true,
       ),
       body: _pages[_selectedIndex],
       floatingActionButton: _selectedIndex == 1
           ? FloatingActionButton(
-        onPressed: () => _journalKey.currentState?.openComposer(),
-        child: const Icon(Icons.add),
-      )
+              onPressed: () => _journalKey.currentState?.openComposer(),
+              child: const Icon(Icons.add),
+            )
           : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_stories), label: 'Journal'),
-          BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: 'Challenges'),
-          BottomNavigationBarItem(icon: Icon(Icons.mood), label: 'Mood'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        items: [
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: loc?.home ?? 'Home'),
+          BottomNavigationBarItem(icon: const Icon(Icons.auto_stories), label: loc?.journal ?? 'Journal'),
+          BottomNavigationBarItem(icon: const Icon(Icons.emoji_events), label: loc?.challenges ?? 'Challenges'),
+          BottomNavigationBarItem(icon: const Icon(Icons.mood), label: loc?.mood ?? 'Mood'),
+          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: loc?.settings ?? 'Settings'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.teal,
@@ -118,18 +140,19 @@ class SettingsScreen extends StatelessWidget {
       await ChallengesNotifications.instance.sendTestNotification();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ Test notification sent!'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)?.testNotificationSent ?? '✅ Test notification sent!'),
+            duration: const Duration(seconds: 2),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (context.mounted) {
+        final errorMsg = AppLocalizations.of(context)?.testNotificationError(e) ?? '❌ Error: $e';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('❌ Error: $e'),
+            content: Text(errorMsg),
             duration: const Duration(seconds: 3),
             backgroundColor: Colors.red,
           ),
@@ -140,22 +163,23 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Settings',
-            style: TextStyle(
+          Text(
+            loc?.settings ?? 'Settings',
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Notifications',
-            style: TextStyle(
+          Text(
+            loc?.notifications ?? 'Notifications',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -172,16 +196,59 @@ class SettingsScreen extends StatelessWidget {
                 color: Colors.teal,
                 size: 28,
               ),
-              title: const Text(
-                'Send Test Notification',
-                style: TextStyle(
+              title: Text(
+                loc?.sendTestNotification ?? 'Send Test Notification',
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
               ),
-              subtitle: const Text('Test your notification settings'),
+              subtitle: Text(loc?.testNotificationSubtitle ?? 'Test your notification settings'),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () => _sendTestNotification(context),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            loc?.language ?? 'Language',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(
+                Icons.language,
+                color: Colors.teal,
+                size: 28,
+              ),
+              title: Text(loc?.selectLanguage ?? 'Select Language'),
+              trailing: DropdownButton<Locale>(
+                value: _localeNotifier.value ?? Localizations.localeOf(context),
+                onChanged: (Locale? newLocale) {
+                  _localeNotifier.value = newLocale;
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: const Locale('en'),
+                    child: Text(loc?.english ?? 'English'),
+                  ),
+                  DropdownMenuItem(
+                    value: const Locale('es'),
+                    child: Text(loc?.spanish ?? 'Spanish'),
+                  ),
+                  DropdownMenuItem(
+                    value: const Locale('fr'),
+                    child: Text(loc?.french ?? 'French'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

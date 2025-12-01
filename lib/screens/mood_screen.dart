@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../databases/mood_database.dart';
+import '../l10n/app_localizations.dart';
 
 class MoodScreen extends StatefulWidget {
   const MoodScreen({super.key});
@@ -24,17 +25,42 @@ class _MoodScreenState extends State<MoodScreen> {
     '😕 Confused',
   ];
 
+  String _localizedMoodLabel(BuildContext context, String mood) {
+    final loc = AppLocalizations.of(context);
+    switch (mood) {
+      case '😊 Happy':
+        return loc?.moodLabelHappy ?? mood;
+      case '😐 Neutral':
+        return loc?.moodLabelNeutral ?? mood;
+      case '😔 Sad':
+        return loc?.moodLabelSad ?? mood;
+      case '😡 Angry':
+        return loc?.moodLabelAngry ?? mood;
+      case '😴 Tired':
+        return loc?.moodLabelTired ?? mood;
+      case '😌 Relaxed':
+        return loc?.moodLabelRelaxed ?? mood;
+      case '😲 Shocked':
+        return loc?.moodLabelShocked ?? mood;
+      case '😕 Confused':
+        return loc?.moodLabelConfused ?? mood;
+      default:
+        return mood;
+    }
+  }
+
   // Mood picker dialog
   void _pickMood(String type) async {
+    final loc = AppLocalizations.of(context);
     String? selected = await showDialog<String>(
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: Text('Select your $type mood'),
+          title: Text(loc?.selectMoodTitle(type) ?? 'Select your $type mood'),
           children: moods.map((mood) {
             return SimpleDialogOption(
               onPressed: () => Navigator.pop(context, mood),
-              child: Text(mood),
+              child: Text(_localizedMoodLabel(context, mood)),
             );
           }).toList(),
         );
@@ -49,7 +75,7 @@ class _MoodScreenState extends State<MoodScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You selected: $selected')),
+        SnackBar(content: Text(loc?.selectedMood(_localizedMoodLabel(context, selected)) ?? 'You selected: $selected')),
       );
     }
   }
@@ -57,8 +83,9 @@ class _MoodScreenState extends State<MoodScreen> {
   // Save mood to database
   Future<void> _saveMood() async {
     if (overallMood == null || beforeMood == null || afterMood == null) {
+      final loc = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select all moods before saving!')),
+        SnackBar(content: Text(loc?.fillAllMoods ?? 'Please select all moods before saving.')),
       );
       return;
     }
@@ -129,24 +156,23 @@ class _MoodScreenState extends State<MoodScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Mood Tracker')),
+      appBar: AppBar(title: Text(loc?.moodTracker ?? 'Mood Tracker')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Track Your Mood 🌸',
-                style: TextStyle(
+              Text(
+                loc?.trackYourMood ?? 'Track Your Mood 🌸',
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 40),
-
-              // Overall Mood Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -158,21 +184,18 @@ class _MoodScreenState extends State<MoodScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: const Text('Select Overall Mood'),
+                  child: Text(loc?.selectOverallMood ?? 'Select Overall Mood'),
                 ),
               ),
               if (overallMood != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    'Overall Mood: $overallMood',
+                    loc?.overallMood(_localizedMoodLabel(context, overallMood!)) ?? 'Overall Mood: ${_localizedMoodLabel(context, overallMood!)}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
-
               const SizedBox(height: 25),
-
-              // Before Mood Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -184,21 +207,18 @@ class _MoodScreenState extends State<MoodScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: const Text('Select Mood Before Challenge'),
+                  child: Text(loc?.selectMoodBefore ?? 'Select Mood Before Challenge'),
                 ),
               ),
               if (beforeMood != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    'Before Mood: $beforeMood',
+                    loc?.beforeMood(_localizedMoodLabel(context, beforeMood!)) ?? 'Before Mood: ${_localizedMoodLabel(context, beforeMood!)}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
-
               const SizedBox(height: 25),
-
-              // After Mood Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -210,27 +230,24 @@ class _MoodScreenState extends State<MoodScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: const Text('Select Mood After Challenge'),
+                  child: Text(loc?.selectMoodAfter ?? 'Select Mood After Challenge'),
                 ),
               ),
               if (afterMood != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    'After Mood: $afterMood',
+                    loc?.afterMood(_localizedMoodLabel(context, afterMood!)) ?? 'After Mood: ${_localizedMoodLabel(context, afterMood!)}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
-
               const SizedBox(height: 40),
-
-              // Save Mood Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: _saveMood,
                   icon: const Icon(Icons.save),
-                  label: const Text('Save Mood'),
+                  label: Text(loc?.saveMood ?? 'Save Mood'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -241,16 +258,13 @@ class _MoodScreenState extends State<MoodScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 15),
-
-              // View Saved Moods Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: _showSavedMoods,
                   icon: const Icon(Icons.history),
-                  label: const Text('View Saved Moods'),
+                  label: Text(loc?.viewSavedMoods ?? 'View Saved Moods'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 20),

@@ -1,0 +1,19 @@
+{
+  "appTitle": "Lester",
+  "settings": "Paramètres",
+  "notifications": "Notifications",
+  "sendTestNotification": "Envoyer une notification de test",
+  "testNotificationSubtitle": "Testez vos paramètres de notification",
+  "testNotificationSent": "✅ Notification de test envoyée !",
+  "testNotificationError": "❌ Erreur : {error}",
+  "language": "Langue",
+  "selectLanguage": "Choisir la langue",
+  "english": "Anglais",
+  "spanish": "Espagnol",
+  "french": "Français",
+  "home": "Accueil",
+  "journal": "Journal",
+  "challenges": "Défis",
+  "mood": "Humeur"
+}
+
