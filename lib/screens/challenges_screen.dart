@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../databases/challenge_database.dart';
 
@@ -29,154 +30,159 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   Future<void> _toggleChallenge(int index) async {
     final challenge = _challenges[index];
 
-    // Update UI immediately
     setState(() {
       _challenges[index] = challenge.copyWith(completed: !challenge.completed);
     });
 
-    // Update database in background
     await DatabaseHelper.instance.toggleCompletion(
       challenge.id!,
       !challenge.completed,
     );
   }
 
-  Color _getCardColor(int dayNumber) {
+  /// Pastel colors cycle
+  Color _pastel(int index) {
     final colors = [
-      const Color(0xFFE8D4F8), // Light purple
-      const Color(0xFFD4E8F8), // Light blue
-      const Color(0xFFF8E8D4), // Light orange
-      const Color(0xFFD4F8E8), // Light green
+      const Color(0xFFCDA9FC), // lilac
+      const Color(0xFFA1D9FF), // soft blue
+      const Color(0xFFFBC576), // peach
+      const Color(0xFF81EDA9), // mint
+      const Color(0xFFF897BD), // pink
     ];
-    return colors[dayNumber % colors.length];
+    return colors[index % colors.length];
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    if (_isLoading) return const Center(child: CircularProgressIndicator());
 
     if (_challenges.isEmpty) {
       return const Center(
-        child: Text('No challenges available'),
+        child: Text('No challenges available 😔'),
       );
     }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: _challenges.length,
-      itemBuilder: (context, index) {
-        final challenge = _challenges[index];
-        return _buildChallengeCard(challenge, index);
-      },
+      itemBuilder: (context, index) => _buildGlassCard(context, _challenges[index], index),
     );
   }
 
-  Widget _buildChallengeCard(Challenge challenge, int index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: _getCardColor(challenge.dayNumber),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+  Widget _buildGlassCard(BuildContext context, Challenge challenge, int index) {
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 14),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          margin: const EdgeInsets.only(bottom: 18),
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: _pastel(index).withOpacity(
+              dark ? 0.25 : 0.60, // lighter transparency in light mode
+            ),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.25),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: dark
+                    ? Colors.black.withOpacity(0.35)
+                    : Colors.grey.withOpacity(0.20),
+                blurRadius: 12,
+                offset: const Offset(0, 5),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _toggleChallenge(index),
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
+          child: InkWell(
+            onTap: () => _toggleChallenge(index),
+            borderRadius: BorderRadius.circular(18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                /// 🔹 Title + Checkmark
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Text(
                         challenge.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2C2C2C),
+                          color: dark ? Colors.white : Colors.black87,
                         ),
                       ),
                     ),
                     if (challenge.completed)
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Color(0xFF477247),
-                          size: 24,
-                        ),
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 28,
                       ),
                   ],
                 ),
+
                 const SizedBox(height: 8),
+
+                /// 🔹 Description
                 Text(
                   challenge.description,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 15,
                     color: challenge.completed
                         ? Colors.grey
-                        : const Color(0xFF666666),
+                        : (dark ? Colors.white70 : Colors.black54),
                   ),
                 ),
+
                 const SizedBox(height: 12),
+
+                /// 🔹 Points row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${challenge.points} Points',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyle(
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF888888),
+                        color: dark ? Colors.white70 : Colors.grey[700],
                       ),
                     ),
                     if (challenge.completed)
                       Text(
-                        '+${challenge.points} Points',
-                        style: const TextStyle(
-                          fontSize: 14,
+                        '+${challenge.points} ⭐',
+                        style: TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF477247),
+                          color: dark ? Colors.greenAccent : Colors.green,
                         ),
                       ),
                   ],
                 ),
-                if (challenge.name.contains('picture') &&
+
+                /// 🔹 Camera section
+                if (challenge.name.toLowerCase().contains("picture") &&
                     !challenge.completed)
                   Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.only(top: 14),
+                    padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: Colors.grey.shade300,
+                        color: Colors.white.withOpacity(0.4),
                         width: 2,
-                        style: BorderStyle.solid,
                       ),
-                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 40,
-                        color: Color(0xFF888888),
-                      ),
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 40,
+                      color: dark ? Colors.white60 : Colors.black54,
                     ),
                   ),
               ],

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../databases/mood_database.dart';
 
@@ -24,21 +25,32 @@ class _MoodScreenState extends State<MoodScreen> {
     '😕 Confused',
   ];
 
+  // Pastel theme rotation
+  Color _pastelColor(int index) {
+    final colors = [
+      const Color(0xFFCDA9FC), // lilac
+      const Color(0xFFA1D9FF), // soft blue
+      const Color(0xFFFBC576), // peach
+      const Color(0xFF81EDA9), // mint
+      const Color(0xFFF897BD), // pink
+    ];
+    return colors[index % colors.length].withOpacity(0.55);
+  }
+
   // Mood picker dialog
-  void _pickMood(String type) async {
-    String? selected = await showDialog<String>(
+  Future<void> _pickMood(String type) async {
+    final String? selected = await showDialog<String>(
       context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: Text('Select your $type mood'),
-          children: moods.map((mood) {
-            return SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, mood),
-              child: Text(mood),
-            );
-          }).toList(),
-        );
-      },
+      builder: (context) => SimpleDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text('Select your $type mood'),
+        children: moods.map((mood) {
+          return SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, mood),
+            child: Text(mood, style: const TextStyle(fontSize: 18)),
+          );
+        }).toList(),
+      ),
     );
 
     if (selected != null) {
@@ -48,9 +60,14 @@ class _MoodScreenState extends State<MoodScreen> {
         if (type == 'after') afterMood = selected;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You selected: $selected')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('You selected: $selected'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
@@ -83,7 +100,7 @@ class _MoodScreenState extends State<MoodScreen> {
     });
   }
 
-  // Show saved moods in a dialog
+  // Show saved moods
   Future<void> _showSavedMoods() async {
     final moods = await MoodDatabase.instance.getMoods();
 
@@ -96,34 +113,61 @@ class _MoodScreenState extends State<MoodScreen> {
 
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Saved Moods'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: moods.length,
-              itemBuilder: (context, index) {
-                final m = moods[index];
-                return ListTile(
-                  leading: const Icon(Icons.mood, color: Colors.teal),
-                  title: Text('Overall: ${m.overallMood}'),
-                  subtitle: Text(
-                    'Before: ${m.beforeMood}\nAfter: ${m.afterMood}\nDate: ${m.createdAt.toLocal()}',
-                  ),
-                );
-              },
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Saved Moods'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: moods.length,
+            itemBuilder: (context, index) {
+              final m = moods[index];
+              return ListTile(
+                leading: const Icon(Icons.mood, color: Colors.teal),
+                title: Text('Overall: ${m.overallMood}'),
+                subtitle: Text(
+                    'Before: ${m.beforeMood}\nAfter: ${m.afterMood}\nDate: ${m.createdAt.toLocal()}'),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        ],
+      ),
+    );
+  }
+
+  // Glass button builder
+  Widget _glassButton(String label, VoidCallback action, int index) {
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
+
+    return SizedBox(
+      width: double.infinity,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: ElevatedButton(
+            onPressed: action,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(55),
+              backgroundColor: _pastelColor(index),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: dark ? Colors.white : Colors.black87,
+              ),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -131,137 +175,35 @@ class _MoodScreenState extends State<MoodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Mood Tracker')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Track Your Mood 🌸',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // Overall Mood Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _pickMood('overall'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: const Text('Select Overall Mood'),
-                ),
-              ),
-              if (overallMood != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Overall Mood: $overallMood',
-                    style: const TextStyle(fontSize: 16),
-                  ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 35),
+            child: Column(
+              children: [
+                const Text(
+                  'Track Your Mood 🌸',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 30),
 
-              // Before Mood Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _pickMood('before'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: const Text('Select Mood Before Challenge'),
-                ),
-              ),
-              if (beforeMood != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Before Mood: $beforeMood',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
+                // Buttons
+                _glassButton('Select Overall Mood', () => _pickMood('overall'), 0),
+                const SizedBox(height: 15),
 
-              const SizedBox(height: 25),
+                _glassButton('Select Mood Before Challenge', () => _pickMood('before'), 1),
+                const SizedBox(height: 15),
 
-              // After Mood Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _pickMood('after'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: const Text('Select Mood After Challenge'),
-                ),
-              ),
-              if (afterMood != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'After Mood: $afterMood',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
+                _glassButton('Select Mood After Challenge', () => _pickMood('after'), 2),
+                const SizedBox(height: 25),
 
-              const SizedBox(height: 40),
+                _glassButton('Save Mood', _saveMood, 3),
+                const SizedBox(height: 12),
 
-              // Save Mood Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _saveMood,
-                  icon: const Icon(Icons.save),
-                  label: const Text('Save Mood'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              // View Saved Moods Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _showSavedMoods,
-                  icon: const Icon(Icons.history),
-                  label: const Text('View Saved Moods'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    textStyle: const TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                _glassButton('View Saved Moods', _showSavedMoods, 4),
+              ],
+            ),
           ),
         ),
       ),

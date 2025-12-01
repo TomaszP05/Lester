@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../databases/challenge_database.dart';
 import '../notifications/challenges_notifications.dart';
@@ -29,9 +30,7 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void loadCurrentChallenge() {
-    _loadCurrentChallenge(); // call private implementation from same file
-  }
+  void loadCurrentChallenge() => _loadCurrentChallenge();
 
   Future<void> _toggleChallenge() async {
     if (_currentChallenge == null) return;
@@ -42,287 +41,211 @@ class HomeScreenState extends State<HomeScreen> {
       _currentChallenge = _currentChallenge!.copyWith(completed: !wasCompleted);
     });
 
-    // Update database
     await DatabaseHelper.instance.toggleCompletion(
       _currentChallenge!.id!,
       !wasCompleted,
     );
 
-    // If  completed, cancel notifications and show snackbar
     if (!wasCompleted && _currentChallenge!.completed) {
       await ChallengesNotifications.instance.cancelAllNotifications();
-
       if (mounted) {
         final timeUntilNext = ChallengesNotifications.getFormattedTimeUntilNext();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('🎉 Challenge completed! Next challenge drops in $timeUntilNext'),
             duration: const Duration(seconds: 4),
-            backgroundColor: const Color(0xFF477247),
+            backgroundColor: Colors.green.shade600,
           ),
         );
       }
-    } else if (wasCompleted && !_currentChallenge!.completed) {
-      // If incomplete, reschedule notifications
+    } else {
       await ChallengesNotifications.instance.scheduleHourlyNotifications();
     }
   }
 
-  Color _getCardColor(int dayNumber) {
-    final colors = [
-      const Color(0xFFE8D4F8), // Light purple
-      const Color(0xFFD4E8F8), // Light blue
-      const Color(0xFFF8E8D4), // Light orange
-      const Color(0xFFD4F8E8), // Light green
+  // Pastel Rotation
+  Color _pastelColor(int index) {
+    final list = [
+      const Color(0xFFCDA9FC),
+      const Color(0xFFA1D9FF),
+      const Color(0xFFFBC576),
+      const Color(0xFF81EDA9),
+      const Color(0xFFF897BD),
     ];
-    return colors[dayNumber % colors.length];
+    return list[index % list.length];
+  }
+
+  /// Glass Card Container (Light Mode Only)
+  Widget _glassContainer({required Widget child, required Color color}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.60),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.25),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              )
+            ],
+          ),
+          child: child,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // const Text(
-          //   'Welcome to Lester 🌸',
-          //   style: TextStyle(
-          //     fontSize: 28,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFD4F8E8), // light green background
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Welcome to Lester 🌸!',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+          // Welcome Card
+          _glassContainer(
+            color: _pastelColor(3),
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Welcome to Lester 🌸!',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "Let's log how you're feeling~ 🫧",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
+                        SizedBox(height: 4),
+                        Text(
+                          "Let's log how you're feeling~ 🫧",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black54,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('assets/LesterMascot.png'),
-                ),
-              ],
+                  const CircleAvatar(
+                    radius: 28,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('assets/LesterMascot.png'),
+                  ),
+                ],
+              ),
             ),
           ),
 
           const SizedBox(height: 24),
-          const Text(
-            'Daily Insights',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          const Text('Daily Insights', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           const InsightsWidget(),
-          
-          const SizedBox(height: 24),
-          const Text(
-            'Today\'s Challenge',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+
+          const SizedBox(height: 28),
+          const Text("Today's Challenge", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
+
           if (_isLoading)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(),
-              ),
-            )
+            const Center(child: CircularProgressIndicator())
           else if (_currentChallenge == null)
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Center(
-                child: Text(
-                  'No challenge available for today',
-                  style: TextStyle(fontSize: 16),
-                ),
+            _glassContainer(
+              color: Colors.grey,
+              child: const Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(child: Text("No challenge available for today")),
               ),
             )
           else
-            _buildChallengeCard(_currentChallenge!),
+            _glassContainer(
+              color: _pastelColor(_currentChallenge!.dayNumber),
+              child: _buildChallengeCard(_currentChallenge!),
+            ),
 
-          const SizedBox(height: 32),
-          const Text(
-            'Weekly Reflection Quiz',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+          const SizedBox(height: 30),
+          const Text('Weekly Reflection Quiz',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 14),
+
+          _glassContainer(
+            color: _pastelColor(1),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Center(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ReflectionScreen()),
+                  ),
+                  icon: const Icon(Icons.self_improvement, color: Colors.white),
+                  label: const Text(
+                    "Start Weekly Reflection",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 16),
-
-          // 🌸 ADD REFLECTION BUTTON
-          Center(
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                backgroundColor: Colors.teal,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ReflectionScreen()),
-                );
-              },
-              icon: const Icon(Icons.self_improvement, color: Colors.white),
-              label: const Text(
-                "Start Weekly Reflection",
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-
         ],
       ),
     );
   }
 
   Widget _buildChallengeCard(Challenge challenge) {
-    return Container(
-      decoration: BoxDecoration(
-        color: _getCardColor(challenge.dayNumber),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return Padding(
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  challenge.name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                ),
+              ),
+              if (challenge.completed)
+                const Icon(Icons.check_circle, color: Colors.green, size: 26),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: _toggleChallenge,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        challenge.name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2C2C2C),
-                        ),
-                      ),
-                    ),
-                    if (challenge.completed)
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Color(0xFF477247),
-                          size: 24,
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  challenge.description,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: challenge.completed
-                        ? Colors.grey
-                        : const Color(0xFF666666),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${challenge.points} Points',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF888888),
-                      ),
-                    ),
-                    if (challenge.completed)
-                      Text(
-                        '+${challenge.points} Points',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF477247),
-                        ),
-                      ),
-                  ],
-                ),
-                if (challenge.name.contains('picture') &&
-                    !challenge.completed)
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 2,
-                        style: BorderStyle.solid,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 40,
-                        color: Color(0xFF888888),
-                      ),
-                    ),
-                  ),
-              ],
+          const SizedBox(height: 10),
+          Text(
+            challenge.description,
+            style: TextStyle(
+              fontSize: 15,
+              color: challenge.completed ? Colors.grey : Colors.black54,
             ),
           ),
-        ),
+          const SizedBox(height: 12),
+          Text(
+            "${challenge.points} Points",
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.6)),
+          ),
+        ],
       ),
     );
   }

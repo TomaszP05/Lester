@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
@@ -26,22 +25,60 @@ void main() async {
   runApp(const LesterApp());
 }
 
-class LesterApp extends StatelessWidget {
+class LesterApp extends StatefulWidget {
   const LesterApp({super.key});
+
+  @override
+  State<LesterApp> createState() => _LesterAppState();
+}
+
+class _LesterAppState extends State<LesterApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  void updateTheme(ThemeMode mode) {
+    setState(() => _themeMode = mode);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lester',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.teal),
-      home: const MainNavigation(),
+      themeMode: _themeMode,
+
+      // 🌸 Light Theme
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF7F7FA),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+          brightness: Brightness.light,
+        ),
+        cardColor: Colors.white.withOpacity(0.7),
+        useMaterial3: true,
+      ),
+
+      // 🌙 Dark Theme
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF111114),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+          brightness: Brightness.dark,
+        ),
+        cardColor: Colors.white.withOpacity(0.15),
+        useMaterial3: true,
+      ),
+
+      home: MainNavigation(onThemeChange: updateTheme),
     );
   }
 }
 
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+  final void Function(ThemeMode) onThemeChange;
+
+  const MainNavigation({super.key, required this.onThemeChange});
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
@@ -50,9 +87,9 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  final GlobalKey<JournalScreenState> _journalKey =
-  GlobalKey<JournalScreenState>();
+  final GlobalKey<JournalScreenState> _journalKey = GlobalKey<JournalScreenState>();
   final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
+
   late final List<Widget> _pages;
 
   @override
@@ -63,16 +100,13 @@ class _MainNavigationState extends State<MainNavigation> {
       JournalScreen(key: _journalKey),
       const ChallengesScreen(),
       const MoodScreen(),
-      const SettingsScreen(),
+      SettingsScreen(onThemeChange: widget.onThemeChange),
     ];
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
 
-    // Refresh home screen when returning to it
     if (index == 0) {
       _homeKey.currentState?.loadCurrentChallenge();
     }
@@ -85,7 +119,10 @@ class _MainNavigationState extends State<MainNavigation> {
         title: const Text('Lester'),
         centerTitle: true,
       ),
-      body: _pages[_selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        child: _pages[_selectedIndex],
+      ),
       floatingActionButton: _selectedIndex == 1
           ? FloatingActionButton(
         onPressed: () => _journalKey.currentState?.openComposer(),
@@ -93,7 +130,11 @@ class _MainNavigationState extends State<MainNavigation> {
       )
           : null,
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
+        onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.auto_stories), label: 'Journal'),
@@ -101,91 +142,57 @@ class _MainNavigationState extends State<MainNavigation> {
           BottomNavigationBarItem(icon: Icon(Icons.mood), label: 'Mood'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
       ),
     );
   }
 }
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  final void Function(ThemeMode) onThemeChange;
+
+  const SettingsScreen({super.key, required this.onThemeChange});
 
   Future<void> _sendTestNotification(BuildContext context) async {
     try {
       await ChallengesNotifications.instance.sendTestNotification();
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ Test notification sent!'),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('✅ Test notification sent!')),
+      );
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('❌ Error: $e'),
-            duration: const Duration(seconds: 3),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Error: $e')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Settings',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'Notifications',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(
-                Icons.notifications_active,
-                color: Colors.teal,
-                size: 28,
-              ),
-              title: const Text(
-                'Send Test Notification',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-              subtitle: const Text('Test your notification settings'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () => _sendTestNotification(context),
-            ),
-          ),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        const Text("Settings", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 24),
+
+        const Text("Appearance", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+        ListTile(
+          leading: const Icon(Icons.light_mode),
+          title: const Text("Light Mode"),
+          onTap: () => onThemeChange(ThemeMode.light),
+        ),
+        ListTile(
+          leading: const Icon(Icons.dark_mode),
+          title: const Text("Dark Mode"),
+          onTap: () => onThemeChange(ThemeMode.dark),
+        ),
+
+        const SizedBox(height: 24),
+        const Text("Notifications", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+        ListTile(
+          leading: const Icon(Icons.notifications_active),
+          title: const Text("Send Test Notification"),
+          onTap: () => _sendTestNotification(context),
+        ),
+      ],
     );
   }
 }
