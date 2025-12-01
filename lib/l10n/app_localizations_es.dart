@@ -205,4 +205,190 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tryAgain => 'Intentar de nuevo';
+
+  @override
+  String get daily_challenge_1_name => 'Desafío Diario 1';
+
+  @override
+  String get daily_challenge_1_description => 'Sonríe a cinco personas hoy';
+
+  @override
+  String get daily_challenge_2_name => 'Desafío Diario 2';
+
+  @override
+  String get daily_challenge_2_description => 'Envía un mensaje positivo a alguien que te importe';
+
+  @override
+  String get daily_challenge_3_name => 'Desafío Diario 3';
+
+  @override
+  String get daily_challenge_3_description => 'Da un paseo corto al aire libre y aprecia la naturaleza';
+
+  @override
+  String get daily_challenge_4_name => 'Desafío Diario 4';
+
+  @override
+  String get daily_challenge_4_description => 'Haz una tarea doméstica que has estado posponiendo';
+
+  @override
+  String get daily_challenge_5_name => 'Desafío Diario 5';
+
+  @override
+  String get daily_challenge_5_description => 'Haz un cumplido sincero a alguien';
+
+  @override
+  String get daily_challenge_6_name => 'Desafío Diario 6';
+
+  @override
+  String get daily_challenge_6_description => 'Bebe al menos 8 vasos de agua hoy';
+
+  @override
+  String get daily_challenge_7_name => 'Desafío Diario 7';
+
+  @override
+  String get daily_challenge_7_description => 'Escribe una nota de agradecimiento a un amigo';
+
+  @override
+  String get daily_challenge_8_name => 'Desafío Diario 8';
+
+  @override
+  String get daily_challenge_8_description => 'Sujeta la puerta a alguien';
+
+  @override
+  String get daily_challenge_9_name => 'Desafío Diario 9';
+
+  @override
+  String get daily_challenge_9_description => 'Haz un cumplido a un desconocido';
+
+  @override
+  String get daily_challenge_10_name => 'Desafío Diario 10';
+
+  @override
+  String get daily_challenge_10_description => '¡Toma una foto de una flor y súbela!';
+
+  @override
+  String get daily_challenge_11_name => 'Desafío Diario 11';
+
+  @override
+  String get daily_challenge_11_description => 'Escucha tu canción favorita y no hagas nada más';
+
+  @override
+  String get daily_challenge_12_name => 'Desafío Diario 12';
+
+  @override
+  String get daily_challenge_12_description => 'Prueba una nueva comida o bebida que nunca antes habías tomado';
+
+  @override
+  String get daily_challenge_13_name => 'Desafío Diario 13';
+
+  @override
+  String get daily_challenge_13_description => 'Envía un mensaje amable a un familiar';
+
+  @override
+  String get daily_challenge_14_name => 'Desafío Diario 14';
+
+  @override
+  String get daily_challenge_14_description => 'Recoge un trozo de basura que encuentres fuera';
+
+  @override
+  String get daily_challenge_15_name => 'Desafío Diario 15';
+
+  @override
+  String get daily_challenge_15_description => 'Dedica 10 minutos a estirar o meditar';
+
+  @override
+  String get daily_challenge_16_name => 'Desafío Diario 16';
+
+  @override
+  String get daily_challenge_16_description => 'Dona un artículo que ya no uses';
+
+  @override
+  String get daily_challenge_17_name => 'Desafío Diario 17';
+
+  @override
+  String get daily_challenge_17_description => 'Haz un cumplido genuino a alguien';
+
+  @override
+  String get daily_challenge_18_name => 'Desafío Diario 18';
+
+  @override
+  String get daily_challenge_18_description => 'Escribe tres cosas por las que estás agradecido/a';
+
+  @override
+  String get daily_challenge_19_name => 'Desafío Diario 19';
+
+  @override
+  String get daily_challenge_19_description => 'Llama o haz una videollamada con un ser querido';
+
+  @override
+  String get daily_challenge_20_name => 'Desafío Diario 20';
+
+  @override
+  String get daily_challenge_20_description => 'Comparte una cita inspiradora en las redes sociales';
+
+  @override
+  String get daily_challenge_21_name => 'Desafío Diario 21';
+
+  @override
+  String get daily_challenge_21_description => 'Toma una foto de algo que te haga feliz';
+
+  @override
+  String get daily_challenge_22_name => 'Desafío Diario 22';
+
+  @override
+  String get daily_challenge_22_description => 'Pasa una hora sin tu teléfono u ordenador';
+
+  @override
+  String get daily_challenge_23_name => 'Desafío Diario 23';
+
+  @override
+  String get daily_challenge_23_description => 'Ayuda a alguien sin esperar nada a cambio';
+
+  @override
+  String get daily_challenge_24_name => 'Desafío Diario 24';
+
+  @override
+  String get daily_challenge_24_description => 'Cocina o prepara una comida saludable';
+
+  @override
+  String get daily_challenge_25_name => 'Desafío Diario 25';
+
+  @override
+  String get daily_challenge_25_description => 'Deja una reseña positiva para un pequeño negocio';
+
+  @override
+  String get daily_challenge_26_name => 'Desafío Diario 26';
+
+  @override
+  String get daily_challenge_26_description => 'Dedica 15 minutos a escribir en un diario o a reflexionar';
+
+  @override
+  String get daily_challenge_27_name => 'Desafío Diario 27';
+
+  @override
+  String get daily_challenge_27_description => 'Di «gracias» a alguien que te ayude hoy';
+
+  @override
+  String get daily_challenge_28_name => 'Desafío Diario 28';
+
+  @override
+  String get daily_challenge_28_description => 'Lee o escucha algo edificante';
+
+  @override
+  String get daily_challenge_29_name => 'Desafío Diario 29';
+
+  @override
+  String get daily_challenge_29_description => 'Haz un acto de bondad al azar de forma anónima';
+
+  @override
+  String get daily_challenge_30_name => 'Desafío Diario 30';
+
+  @override
+  String get daily_challenge_30_description => 'Dedica 10 minutos a organizar tu espacio';
+
+  @override
+  String get daily_challenge_31_name => 'Desafío Diario 31';
+
+  @override
+  String get daily_challenge_31_description => 'Reflexiona sobre el mes: ¿de qué estás orgulloso/a?';
 }

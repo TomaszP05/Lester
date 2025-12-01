@@ -1,8 +1,10 @@
-import 'dart:io' show Platform;
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import '../databases/challenge_database.dart';
+import '../l10n/app_localizations.dart';
+import '../l10n/key_resolver.dart';
 
 class ChallengesNotifications {
   static final ChallengesNotifications instance = ChallengesNotifications._init();
@@ -65,8 +67,9 @@ class ChallengesNotifications {
     }
   }
 
-  // Schedule hourly notifications
-  Future<void> scheduleHourlyNotifications() async {
+  // Schedule hourly notifications. If a BuildContext is provided, resolve
+  // localization keys to translated strings before scheduling.
+  Future<void> scheduleHourlyNotifications([BuildContext? context]) async {
     try {
       // Cancel any existing notifications
       await _notifications.cancelAll();
@@ -74,16 +77,24 @@ class ChallengesNotifications {
       final currentChallenge = await getCurrentChallenge();
       if (currentChallenge == null || currentChallenge.completed) return;
 
+      // Resolve localized title/body if context is available
+      final localizedTitle = context != null
+          ? resolveLocalizedKey(context, currentChallenge.name)
+          : currentChallenge.name;
+      final localizedBody = context != null
+          ? resolveLocalizedKey(context, currentChallenge.description)
+          : currentChallenge.description;
+
       // Schedule notifications for every hour from 8 AM to 8 PM
       for (int hour = 8; hour <= 20; hour++) {
-        await _scheduleNotificationForHour(hour, currentChallenge);
+        await _scheduleNotificationForHour(hour, localizedTitle, localizedBody, currentChallenge);
       }
     } catch (e) {
       print('Error scheduling notifications: $e');
     }
   }
 
-  Future<void> _scheduleNotificationForHour(int hour, Challenge challenge) async {
+  Future<void> _scheduleNotificationForHour(int hour, String title, String body, Challenge challenge) async {
     final now = DateTime.now();
     var scheduledDate = DateTime(now.year, now.month, now.day, hour, 0);
 
@@ -115,8 +126,8 @@ class ChallengesNotifications {
 
     await _notifications.zonedSchedule(
       hour, // Unique ID for each hour
-      'Daily Challenge',
-      challenge.description,
+      title,
+      body,
       tzScheduledDate,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -145,9 +156,17 @@ class ChallengesNotifications {
     return '$hours hours';
   }
 
-  // Send immediate test notification
-  Future<void> sendTestNotification() async {
+  // Send immediate test notification. If context is provided, resolve localized strings.
+  Future<void> sendTestNotification([BuildContext? context]) async {
     final currentChallenge = await getCurrentChallenge();
+
+    final title = context != null
+        ? (currentChallenge != null ? resolveLocalizedKey(context, currentChallenge.name) : (AppLocalizations.of(context)?.testNotificationSent ?? 'Daily Challenge Reminder'))
+        : 'Daily Challenge Reminder';
+
+    final body = context != null
+        ? (currentChallenge != null ? resolveLocalizedKey(context, currentChallenge.description) : (AppLocalizations.of(context)?.testNotificationSubtitle ?? 'Complete your daily challenge!'))
+        : (currentChallenge?.description ?? 'Complete your daily challenge!');
 
     const androidDetails = AndroidNotificationDetails(
       'daily_challenges',
@@ -170,8 +189,8 @@ class ChallengesNotifications {
 
     await _notifications.show(
       999, // Unique ID for test notifications
-      'Daily Challenge Reminder',
-      currentChallenge?.description ?? 'Complete your daily challenge!',
+      title,
+      body,
       notificationDetails,
     );
   }

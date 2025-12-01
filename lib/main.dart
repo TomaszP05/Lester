@@ -21,7 +21,8 @@ void main() async {
 
   try {
     await ChallengesNotifications.instance.initialize();
-    await ChallengesNotifications.instance.scheduleHourlyNotifications();
+    // Do not schedule notifications here: localization isn't available yet.
+    // Scheduling will happen after the app is built so we can resolve localized strings.
   } catch (e) {
     print('Error initializing notifications: $e');
   }
@@ -48,6 +49,12 @@ class _LesterAppState extends State<LesterApp> {
     return ValueListenableBuilder<Locale?>(
       valueListenable: _localeNotifier,
       builder: (context, locale, _) {
+        // After each build/frame ensure notifications are scheduled with the
+        // current locale by resolving localization keys with this context.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ChallengesNotifications.instance.scheduleHourlyNotifications(context);
+        });
+
         return MaterialApp(
           title: 'Lester',
           debugShowCheckedModeBanner: false,
@@ -176,7 +183,7 @@ class SettingsScreen extends StatelessWidget {
 
   Future<void> _sendTestNotification(BuildContext context) async {
     try {
-      await ChallengesNotifications.instance.sendTestNotification();
+      await ChallengesNotifications.instance.sendTestNotification(context);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

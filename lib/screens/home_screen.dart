@@ -5,6 +5,7 @@ import '../notifications/challenges_notifications.dart';
 import '../widgets/insights_widget.dart';
 import 'reflection_screen.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/key_resolver.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,7 +61,7 @@ class HomeScreenState extends State<HomeScreen> {
         );
       }
     } else {
-      await ChallengesNotifications.instance.scheduleHourlyNotifications();
+      await ChallengesNotifications.instance.scheduleHourlyNotifications(context);
     }
   }
 
@@ -233,6 +234,9 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildChallengeCard(Challenge challenge) {
+    final title = resolveLocalizedKey(context, challenge.name);
+    final description = resolveLocalizedKey(context, challenge.description);
+
     return Padding(
       padding: const EdgeInsets.all(18),
       child: Column(
@@ -243,7 +247,7 @@ class HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: Text(
-                  challenge.name,
+                  title,
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
@@ -254,7 +258,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            challenge.description,
+            description,
             style: TextStyle(
               fontSize: 15,
               color: challenge.completed ? Colors.grey : Colors.black54,

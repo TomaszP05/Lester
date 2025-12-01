@@ -468,6 +468,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get tryAgain;
+
+  /// No description provided for @daily_challenge_1_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 1'**
+  String get daily_challenge_1_name;
+
+  /// No description provided for @daily_challenge_1_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Smile at five people today'**
+  String get daily_challenge_1_description;
+
+  /// No description provided for @daily_challenge_2_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 2'**
+  String get daily_challenge_2_name;
+
+  /// No description provided for @daily_challenge_2_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a positive message to someone you care about'**
+  String get daily_challenge_2_description;
+
+  /// No description provided for @daily_challenge_3_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 3'**
+  String get daily_challenge_3_name;
+
+  /// No description provided for @daily_challenge_3_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a short walk outside and appreciate nature'**
+  String get daily_challenge_3_description;
+
+  /// No description provided for @daily_challenge_4_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 4'**
+  String get daily_challenge_4_name;
+
+  /// No description provided for @daily_challenge_4_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Do one household task you’ve been putting off'**
+  String get daily_challenge_4_description;
+
+  /// No description provided for @daily_challenge_5_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 5'**
+  String get daily_challenge_5_name;
+
+  /// No description provided for @daily_challenge_5_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment someone sincerely'**
+  String get daily_challenge_5_description;
+
+  /// No description provided for @daily_challenge_6_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 6'**
+  String get daily_challenge_6_name;
+
+  /// No description provided for @daily_challenge_6_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink at least 8 glasses of water today'**
+  String get daily_challenge_6_description;
+
+  /// No description provided for @daily_challenge_7_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 7'**
+  String get daily_challenge_7_name;
+
+  /// No description provided for @daily_challenge_7_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a thank you note to a friend'**
+  String get daily_challenge_7_description;
+
+  /// No description provided for @daily_challenge_8_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 8'**
+  String get daily_challenge_8_name;
+
+  /// No description provided for @daily_challenge_8_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the door open for someone'**
+  String get daily_challenge_8_description;
+
+  /// No description provided for @daily_challenge_9_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 9'**
+  String get daily_challenge_9_name;
+
+  /// No description provided for @daily_challenge_9_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment a stranger'**
+  String get daily_challenge_9_description;
+
+  /// No description provided for @daily_challenge_10_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 10'**
+  String get daily_challenge_10_name;
+
+  /// No description provided for @daily_challenge_10_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a picture of a flower and upload a picture!'**
+  String get daily_challenge_10_description;
+
+  /// No description provided for @daily_challenge_11_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 11'**
+  String get daily_challenge_11_name;
+
+  /// No description provided for @daily_challenge_11_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to your favorite song and do nothing else'**
+  String get daily_challenge_11_description;
+
+  /// No description provided for @daily_challenge_12_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 12'**
+  String get daily_challenge_12_name;
+
+  /// No description provided for @daily_challenge_12_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a new food or drink you’ve never had before'**
+  String get daily_challenge_12_description;
+
+  /// No description provided for @daily_challenge_13_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 13'**
+  String get daily_challenge_13_name;
+
+  /// No description provided for @daily_challenge_13_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a kind text to a family member'**
+  String get daily_challenge_13_description;
+
+  /// No description provided for @daily_challenge_14_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 14'**
+  String get daily_challenge_14_name;
+
+  /// No description provided for @daily_challenge_14_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up a piece of litter you find outside'**
+  String get daily_challenge_14_description;
+
+  /// No description provided for @daily_challenge_15_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 15'**
+  String get daily_challenge_15_name;
+
+  /// No description provided for @daily_challenge_15_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend 10 minutes stretching or meditating'**
+  String get daily_challenge_15_description;
+
+  /// No description provided for @daily_challenge_16_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 16'**
+  String get daily_challenge_16_name;
+
+  /// No description provided for @daily_challenge_16_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate an item you no longer use'**
+  String get daily_challenge_16_description;
+
+  /// No description provided for @daily_challenge_17_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 17'**
+  String get daily_challenge_17_name;
+
+  /// No description provided for @daily_challenge_17_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Give someone a genuine compliment'**
+  String get daily_challenge_17_description;
+
+  /// No description provided for @daily_challenge_18_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 18'**
+  String get daily_challenge_18_name;
+
+  /// No description provided for @daily_challenge_18_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Write down three things you’re grateful for'**
+  String get daily_challenge_18_description;
+
+  /// No description provided for @daily_challenge_19_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 19'**
+  String get daily_challenge_19_name;
+
+  /// No description provided for @daily_challenge_19_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Call or video chat with a loved one'**
+  String get daily_challenge_19_description;
+
+  /// No description provided for @daily_challenge_20_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 20'**
+  String get daily_challenge_20_name;
+
+  /// No description provided for @daily_challenge_20_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Share an inspiring quote on social media'**
+  String get daily_challenge_20_description;
+
+  /// No description provided for @daily_challenge_21_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 21'**
+  String get daily_challenge_21_name;
+
+  /// No description provided for @daily_challenge_21_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of something that makes you happy'**
+  String get daily_challenge_21_description;
+
+  /// No description provided for @daily_challenge_22_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 22'**
+  String get daily_challenge_22_name;
+
+  /// No description provided for @daily_challenge_22_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend one hour without your phone or computer'**
+  String get daily_challenge_22_description;
+
+  /// No description provided for @daily_challenge_23_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 23'**
+  String get daily_challenge_23_name;
+
+  /// No description provided for @daily_challenge_23_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Help someone without expecting anything in return'**
+  String get daily_challenge_23_description;
+
+  /// No description provided for @daily_challenge_24_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 24'**
+  String get daily_challenge_24_name;
+
+  /// No description provided for @daily_challenge_24_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Cook or prepare a healthy meal'**
+  String get daily_challenge_24_description;
+
+  /// No description provided for @daily_challenge_25_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 25'**
+  String get daily_challenge_25_name;
+
+  /// No description provided for @daily_challenge_25_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a positive review for a small business'**
+  String get daily_challenge_25_description;
+
+  /// No description provided for @daily_challenge_26_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 26'**
+  String get daily_challenge_26_name;
+
+  /// No description provided for @daily_challenge_26_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend 15 minutes journaling or reflecting'**
+  String get daily_challenge_26_description;
+
+  /// No description provided for @daily_challenge_27_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 27'**
+  String get daily_challenge_27_name;
+
+  /// No description provided for @daily_challenge_27_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Say “thank you” to someone who helps you today'**
+  String get daily_challenge_27_description;
+
+  /// No description provided for @daily_challenge_28_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 28'**
+  String get daily_challenge_28_name;
+
+  /// No description provided for @daily_challenge_28_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Read or listen to something uplifting'**
+  String get daily_challenge_28_description;
+
+  /// No description provided for @daily_challenge_29_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 29'**
+  String get daily_challenge_29_name;
+
+  /// No description provided for @daily_challenge_29_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Do a random act of kindness anonymously'**
+  String get daily_challenge_29_description;
+
+  /// No description provided for @daily_challenge_30_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 30'**
+  String get daily_challenge_30_name;
+
+  /// No description provided for @daily_challenge_30_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Spend 10 minutes organizing your space'**
+  String get daily_challenge_30_description;
+
+  /// No description provided for @daily_challenge_31_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Challenge 31'**
+  String get daily_challenge_31_name;
+
+  /// No description provided for @daily_challenge_31_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflect on the month — what are you proud of?'**
+  String get daily_challenge_31_description;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../databases/challenge_database.dart';
+import '../l10n/key_resolver.dart';
 
 class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({Key? key}) : super(key: key);
@@ -71,6 +72,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
 
   Widget _buildGlassCard(BuildContext context, Challenge challenge, int index) {
     final bool dark = Theme.of(context).brightness == Brightness.dark;
+    final title = resolveLocalizedKey(context, challenge.name);
+    final description = resolveLocalizedKey(context, challenge.description);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
@@ -110,7 +113,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        challenge.name,
+                        title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -131,7 +134,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
 
                 /// 🔹 Description
                 Text(
-                  challenge.description,
+                  description,
                   style: TextStyle(
                     fontSize: 15,
                     color: challenge.completed
@@ -167,7 +170,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                 ),
 
                 /// 🔹 Camera section
-                if (challenge.name.toLowerCase().contains("picture") &&
+                if (title.toLowerCase().contains("picture") &&
                     !challenge.completed)
                   Container(
                     margin: const EdgeInsets.only(top: 14),
