@@ -45,14 +45,37 @@ class _LesterAppState extends State<LesterApp> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return ValueListenableBuilder<Locale?>(
       valueListenable: _localeNotifier,
       builder: (context, locale, _) {
         return MaterialApp(
           title: 'Lester',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(primarySwatch: Colors.teal),
+          
+          // Theme Configuration
+          themeMode: _themeMode,
+          theme: ThemeData(
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: const Color(0xFFF7F7FA),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.teal,
+              brightness: Brightness.light,
+            ),
+            cardColor: Colors.white.withOpacity(0.7),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: const Color(0xFF111114),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.teal,
+              brightness: Brightness.dark,
+            ),
+            cardColor: Colors.white.withOpacity(0.15),
+            useMaterial3: true,
+          ),
+
+          // Localization Configuration
           locale: locale,
           supportedLocales: const [
             Locale('en'),
@@ -65,41 +88,10 @@ class _LesterAppState extends State<LesterApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: const MainNavigation(),
+          
+          home: MainNavigation(onThemeChange: updateTheme),
         );
       },
-=======
-    return MaterialApp(
-      title: 'Lester',
-      debugShowCheckedModeBanner: false,
-      themeMode: _themeMode,
-
-      // 🌸 Light Theme
-      theme: ThemeData(
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF7F7FA),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.teal,
-          brightness: Brightness.light,
-        ),
-        cardColor: Colors.white.withOpacity(0.7),
-        useMaterial3: true,
-      ),
-
-      // 🌙 Dark Theme
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF111114),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.teal,
-          brightness: Brightness.dark,
-        ),
-        cardColor: Colors.white.withOpacity(0.15),
-        useMaterial3: true,
-      ),
-
-      home: MainNavigation(onThemeChange: updateTheme),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
     );
   }
 }
@@ -116,12 +108,7 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-<<<<<<< HEAD
-  final GlobalKey<JournalScreenState> _journalKey =
-      GlobalKey<JournalScreenState>();
-=======
   final GlobalKey<JournalScreenState> _journalKey = GlobalKey<JournalScreenState>();
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
   final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
 
   late final List<Widget> _pages;
@@ -166,25 +153,16 @@ class _MainNavigationState extends State<MainNavigation> {
           : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         selectedItemColor: Colors.teal,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
-<<<<<<< HEAD
         items: [
           BottomNavigationBarItem(icon: const Icon(Icons.home), label: loc?.home ?? 'Home'),
           BottomNavigationBarItem(icon: const Icon(Icons.auto_stories), label: loc?.journal ?? 'Journal'),
           BottomNavigationBarItem(icon: const Icon(Icons.emoji_events), label: loc?.challenges ?? 'Challenges'),
           BottomNavigationBarItem(icon: const Icon(Icons.mood), label: loc?.mood ?? 'Mood'),
           BottomNavigationBarItem(icon: const Icon(Icons.settings), label: loc?.settings ?? 'Settings'),
-=======
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_stories), label: 'Journal'),
-          BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: 'Challenges'),
-          BottomNavigationBarItem(icon: Icon(Icons.mood), label: 'Mood'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
         ],
       ),
     );
@@ -199,7 +177,6 @@ class SettingsScreen extends StatelessWidget {
   Future<void> _sendTestNotification(BuildContext context) async {
     try {
       await ChallengesNotifications.instance.sendTestNotification();
-<<<<<<< HEAD
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -220,139 +197,128 @@ class SettingsScreen extends StatelessWidget {
           ),
         );
       }
-=======
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Test notification sent!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('❌ Error: $e')),
-      );
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
     }
   }
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     final loc = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            loc?.settings ?? 'Settings',
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            loc?.notifications ?? 'Notifications',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(
-                Icons.notifications_active,
-                color: Colors.teal,
-                size: 28,
-              ),
-              title: Text(
-                loc?.sendTestNotification ?? 'Send Test Notification',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-              subtitle: Text(loc?.testNotificationSubtitle ?? 'Test your notification settings'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () => _sendTestNotification(context),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            loc?.language ?? 'Language',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(
-                Icons.language,
-                color: Colors.teal,
-                size: 28,
-              ),
-              title: Text(loc?.selectLanguage ?? 'Select Language'),
-              trailing: DropdownButton<Locale>(
-                value: _localeNotifier.value ?? Localizations.localeOf(context),
-                onChanged: (Locale? newLocale) {
-                  _localeNotifier.value = newLocale;
-                },
-                items: [
-                  DropdownMenuItem(
-                    value: const Locale('en'),
-                    child: Text(loc?.english ?? 'English'),
-                  ),
-                  DropdownMenuItem(
-                    value: const Locale('es'),
-                    child: Text(loc?.spanish ?? 'Spanish'),
-                  ),
-                  DropdownMenuItem(
-                    value: const Locale('fr'),
-                    child: Text(loc?.french ?? 'French'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-=======
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16.0),
       children: [
-        const Text("Settings", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        Text(
+          loc?.settings ?? 'Settings',
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 24),
 
-        const Text("Appearance", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-        ListTile(
-          leading: const Icon(Icons.light_mode),
-          title: const Text("Light Mode"),
-          onTap: () => onThemeChange(ThemeMode.light),
+        // Appearance Section
+        const Text(
+          "Appearance", // Can be localized if added to arb
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        ListTile(
-          leading: const Icon(Icons.dark_mode),
-          title: const Text("Dark Mode"),
-          onTap: () => onThemeChange(ThemeMode.dark),
+        Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.light_mode),
+                title: const Text("Light Mode"),
+                onTap: () => onThemeChange(ThemeMode.light),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.dark_mode),
+                title: const Text("Dark Mode"),
+                onTap: () => onThemeChange(ThemeMode.dark),
+              ),
+            ],
+          ),
         ),
-
         const SizedBox(height: 24),
-        const Text("Notifications", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-        ListTile(
-          leading: const Icon(Icons.notifications_active),
-          title: const Text("Send Test Notification"),
-          onTap: () => _sendTestNotification(context),
+
+        // Language Section
+        Text(
+          loc?.language ?? 'Language',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: const Icon(
+              Icons.language,
+              color: Colors.teal,
+              size: 28,
+            ),
+            title: Text(loc?.selectLanguage ?? 'Select Language'),
+            trailing: DropdownButton<Locale>(
+              value: _localeNotifier.value ?? Localizations.localeOf(context),
+              onChanged: (Locale? newLocale) {
+                _localeNotifier.value = newLocale;
+              },
+              items: [
+                DropdownMenuItem(
+                  value: const Locale('en'),
+                  child: Text(loc?.english ?? 'English'),
+                ),
+                DropdownMenuItem(
+                  value: const Locale('es'),
+                  child: Text(loc?.spanish ?? 'Spanish'),
+                ),
+                DropdownMenuItem(
+                  value: const Locale('fr'),
+                  child: Text(loc?.french ?? 'French'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Notifications Section
+        Text(
+          loc?.notifications ?? 'Notifications',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: const Icon(
+              Icons.notifications_active,
+              color: Colors.teal,
+              size: 28,
+            ),
+            title: Text(
+              loc?.sendTestNotification ?? 'Send Test Notification',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            subtitle: Text(loc?.testNotificationSubtitle ?? 'Test your notification settings'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () => _sendTestNotification(context),
+          ),
         ),
       ],
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
     );
   }
 }

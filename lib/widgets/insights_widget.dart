@@ -58,13 +58,8 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     final weatherCode = (currentWeather['weathercode'] as num?)?.toInt();
 
     return _InsightsData(
-<<<<<<< HEAD
       quote: quoteData['content'] as String? ?? (AppLocalizations.of(context)?.quoteFallback ?? 'Stay positive and keep going.'),
       author: quoteData['author'] as String? ?? (AppLocalizations.of(context)?.unknownAuthor ?? 'Unknown'),
-=======
-      quote: quoteData['content'] ?? 'Stay positive and keep going.',
-      author: quoteData['author'] ?? 'Unknown',
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
       temperature: temperature,
       weatherDescription: _weatherDescription(weatherCode),
       weatherCode: weatherCode,
@@ -102,14 +97,10 @@ class _InsightsWidgetState extends State<InsightsWidget> {
                     });
                   },
                   icon: const Icon(Icons.refresh),
-<<<<<<< HEAD
-                  label: Text(AppLocalizations.of(context)?.tryAgain ?? 'Try again'),
-=======
                   label: Text(
-                    'Try again',
+                    AppLocalizations.of(context)?.tryAgain ?? 'Try again',
                     style: TextStyle(color: dark ? Colors.tealAccent : Colors.teal),
                   ),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
                 ),
               ],
             ),

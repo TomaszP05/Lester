@@ -112,34 +112,6 @@ class HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-<<<<<<< HEAD
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFD4F8E8), // light green background
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        loc?.welcomeTitle ?? 'Welcome to Lester 🌸!',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        loc?.welcomeSubtitle ?? "Let's log how you're feeling~ 🧧",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
-=======
           // Welcome Card
           _glassContainer(
             color: _pastelColor(3),
@@ -150,137 +122,80 @@ class HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
-                          'Welcome to Lester 🌸!',
-                          style: TextStyle(
+                          loc?.welcomeTitle ?? 'Welcome to Lester 🌸!',
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          "Let's log how you're feeling~ 🫧",
-                          style: TextStyle(
-                            fontSize: 15,
+                          loc?.welcomeSubtitle ?? "Let's log how you're feeling~ 🧧",
+                          style: const TextStyle(
+                            fontSize: 16,
                             color: Colors.black54,
                           ),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
                         ),
                       ],
                     ),
                   ),
-<<<<<<< HEAD
-                ),
-                Image.asset('assets/LesterMascot.png', height: 60),
-              ],
-=======
-                  const CircleAvatar(
-                    radius: 28,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('assets/LesterMascot.png'),
-                  ),
+                  const SizedBox(width: 12),
+                  Image.asset('assets/LesterMascot.png', height: 60),
                 ],
               ),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
             ),
           ),
 
           const SizedBox(height: 24),
-<<<<<<< HEAD
+
+          // Daily Insights
           Text(
             loc?.dailyInsightsTitle ?? 'Daily Insights',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 16),
-          const InsightsWidget(),
-          
-          const SizedBox(height: 24),
-          Text(
-            loc?.todaysChallengeTitle ?? 'Today\'s Challenge',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-=======
-          const Text('Daily Insights', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           const InsightsWidget(),
 
-          const SizedBox(height: 28),
-          const Text("Today's Challenge", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
+          const SizedBox(height: 24),
+
+          // Today's Challenge
+          Text(
+            loc?.todaysChallengeTitle ?? "Today's Challenge",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
           const SizedBox(height: 16),
 
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
           else if (_currentChallenge == null)
-<<<<<<< HEAD
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: Text(
-                  loc?.noChallengeMessage ?? 'No challenge available for today',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            )
-          else
-            _buildChallengeCard(_currentChallenge!),
-
-          const SizedBox(height: 32),
-          Text(
-            loc?.weeklyReflectionTitle ?? 'Weekly Reflection Quiz',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-=======
             _glassContainer(
               color: Colors.grey,
-              child: const Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(child: Text("No challenge available for today")),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Center(
+                  child: Text(
+                    loc?.noChallengeMessage ?? 'No challenge available for today',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
             )
           else
             _glassContainer(
               color: _pastelColor(_currentChallenge!.dayNumber),
               child: _buildChallengeCard(_currentChallenge!),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
             ),
 
-<<<<<<< HEAD
-          // 🌸 ADD REFLECTION BUTTON
-          Center(
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                backgroundColor: Colors.teal,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ReflectionScreen()),
-                );
-              },
-              icon: const Icon(Icons.self_improvement, color: Colors.white),
-              label: Text(
-                loc?.startWeeklyReflection ?? "Start Weekly Reflection",
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-=======
-          const SizedBox(height: 30),
-          const Text('Weekly Reflection Quiz',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 32),
+
+          // Weekly Reflection
+          Text(
+            loc?.weeklyReflectionTitle ?? 'Weekly Reflection Quiz',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
           const SizedBox(height: 14),
 
           _glassContainer(
@@ -302,15 +217,16 @@ class HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (_) => const ReflectionScreen()),
                   ),
                   icon: const Icon(Icons.self_improvement, color: Colors.white),
-                  label: const Text(
-                    "Start Weekly Reflection",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  label: Text(
+                    loc?.startWeeklyReflection ?? 'Start Weekly Reflection',
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
->>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
               ),
             ),
           ),
+
+          const SizedBox(height: 24),
         ],
       ),
     );
