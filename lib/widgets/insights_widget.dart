@@ -4,22 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class InsightsWidget extends StatefulWidget {
-  const InsightsWidget({
-    super.key,
-    this.latitude = 43.6532, // Toronto, ON
-    this.longitude = -79.3832,
-    this.locationLabel = 'Toronto, ON',
-  });
-
-  final double latitude;
-  final double longitude;
-  final String locationLabel;
+  const InsightsWidget({super.key});
 
   @override
   State<InsightsWidget> createState() => _InsightsWidgetState();
 }
 
 class _InsightsWidgetState extends State<InsightsWidget> {
+  // Toronto, ON coordinates
+  static const double _latitude = 43.6532;
+  static const double _longitude = -79.3832;
+  static const String _locationLabel = 'Toronto, ON';
+
   late Future<_InsightsData> _insightsFuture;
 
   @override
@@ -36,8 +32,8 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     final weatherFuture = http.get(
       Uri.parse(
         'https://api.open-meteo.com/v1/forecast'
-        '?latitude=${widget.latitude}'
-        '&longitude=${widget.longitude}'
+        '?latitude=$_latitude'
+        '&longitude=$_longitude'
         '&current_weather=true',
       ),
     );
@@ -69,7 +65,7 @@ class _InsightsWidgetState extends State<InsightsWidget> {
       temperature: temperature,
       weatherDescription: _weatherDescription(weatherCode),
       weatherCode: weatherCode,
-      locationLabel: widget.locationLabel,
+      locationLabel: _locationLabel,
     );
   }
 
@@ -330,7 +326,7 @@ class _WeatherRow extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '${data.temperature.toStringAsFixed(1)}°C • ${data.weatherDescription}',
+                '${data.temperature.toStringAsFixed(0)}°C • ${data.weatherDescription}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black87,
