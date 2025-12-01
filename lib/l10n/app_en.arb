@@ -55,10 +55,103 @@
   "weeklyReflectionTitle": "Weekly Reflection Quiz",
   "startWeeklyReflection": "Start Weekly Reflection",
   "welcomeTitle": "Welcome to Lester 🌸!",
-  "welcomeSubtitle": "Let's log how you're feeling~ 🧧",
+  "welcomeSubtitle": "Let's log how you're feeling",
   "quoteLoadError": "Could not load quote. Please try again.",
   "weatherLoadError": "Could not load weather. Please try again.",
   "quoteFallback": "Stay positive and keep going.",
   "unknownAuthor": "Unknown",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+
+  "daily_challenge_1_name": "Daily Challenge 1",
+  "daily_challenge_1_description": "Smile at five people today",
+
+  "daily_challenge_2_name": "Daily Challenge 2",
+  "daily_challenge_2_description": "Send a positive message to someone you care about",
+
+  "daily_challenge_3_name": "Daily Challenge 3",
+  "daily_challenge_3_description": "Take a short walk outside and appreciate nature",
+
+  "daily_challenge_4_name": "Daily Challenge 4",
+  "daily_challenge_4_description": "Do one household task you’ve been putting off",
+
+  "daily_challenge_5_name": "Daily Challenge 5",
+  "daily_challenge_5_description": "Compliment someone sincerely",
+
+  "daily_challenge_6_name": "Daily Challenge 6",
+  "daily_challenge_6_description": "Drink at least 8 glasses of water today",
+
+  "daily_challenge_7_name": "Daily Challenge 7",
+  "daily_challenge_7_description": "Write a thank you note to a friend",
+
+  "daily_challenge_8_name": "Daily Challenge 8",
+  "daily_challenge_8_description": "Hold the door open for someone",
+
+  "daily_challenge_9_name": "Daily Challenge 9",
+  "daily_challenge_9_description": "Compliment a stranger",
+
+  "daily_challenge_10_name": "Daily Challenge 10",
+  "daily_challenge_10_description": "Take a picture of a flower and upload a picture!",
+
+  "daily_challenge_11_name": "Daily Challenge 11",
+  "daily_challenge_11_description": "Listen to your favorite song and do nothing else",
+
+  "daily_challenge_12_name": "Daily Challenge 12",
+  "daily_challenge_12_description": "Try a new food or drink you’ve never had before",
+
+  "daily_challenge_13_name": "Daily Challenge 13",
+  "daily_challenge_13_description": "Send a kind text to a family member",
+
+  "daily_challenge_14_name": "Daily Challenge 14",
+  "daily_challenge_14_description": "Pick up a piece of litter you find outside",
+
+  "daily_challenge_15_name": "Daily Challenge 15",
+  "daily_challenge_15_description": "Spend 10 minutes stretching or meditating",
+
+  "daily_challenge_16_name": "Daily Challenge 16",
+  "daily_challenge_16_description": "Donate an item you no longer use",
+
+  "daily_challenge_17_name": "Daily Challenge 17",
+  "daily_challenge_17_description": "Give someone a genuine compliment",
+
+  "daily_challenge_18_name": "Daily Challenge 18",
+  "daily_challenge_18_description": "Write down three things you’re grateful for",
+
+  "daily_challenge_19_name": "Daily Challenge 19",
+  "daily_challenge_19_description": "Call or video chat with a loved one",
+
+  "daily_challenge_20_name": "Daily Challenge 20",
+  "daily_challenge_20_description": "Share an inspiring quote on social media",
+
+  "daily_challenge_21_name": "Daily Challenge 21",
+  "daily_challenge_21_description": "Take a photo of something that makes you happy",
+
+  "daily_challenge_22_name": "Daily Challenge 22",
+  "daily_challenge_22_description": "Spend one hour without your phone or computer",
+
+  "daily_challenge_23_name": "Daily Challenge 23",
+  "daily_challenge_23_description": "Help someone without expecting anything in return",
+
+  "daily_challenge_24_name": "Daily Challenge 24",
+  "daily_challenge_24_description": "Cook or prepare a healthy meal",
+
+  "daily_challenge_25_name": "Daily Challenge 25",
+  "daily_challenge_25_description": "Leave a positive review for a small business",
+
+  "daily_challenge_26_name": "Daily Challenge 26",
+  "daily_challenge_26_description": "Spend 15 minutes journaling or reflecting",
+
+  "daily_challenge_27_name": "Daily Challenge 27",
+  "daily_challenge_27_description": "Say “thank you” to someone who helps you today",
+
+  "daily_challenge_28_name": "Daily Challenge 28",
+  "daily_challenge_28_description": "Read or listen to something uplifting",
+
+  "daily_challenge_29_name": "Daily Challenge 29",
+  "daily_challenge_29_description": "Do a random act of kindness anonymously",
+
+  "daily_challenge_30_name": "Daily Challenge 30",
+  "daily_challenge_30_description": "Spend 10 minutes organizing your space",
+
+  "daily_challenge_31_name": "Daily Challenge 31",
+  "daily_challenge_31_description": "Reflect on the month — what are you proud of?"
 }

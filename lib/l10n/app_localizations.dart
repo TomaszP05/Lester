@@ -436,7 +436,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s log how you\'re feeling~ 🧧'**
+  /// **'Let\'s log how you\'re feeling'**
   String get welcomeSubtitle;
 
   /// No description provided for @quoteLoadError.

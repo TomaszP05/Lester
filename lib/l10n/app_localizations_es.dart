@@ -189,7 +189,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get welcomeTitle => '¡Bienvenido a Lester 🌸!';
 
   @override
-  String get welcomeSubtitle => 'Registremos cómo te sientes~ 🧧';
+  String get welcomeSubtitle => 'Registremos cómo te sientes';
 
   @override
   String get quoteLoadError => 'No se pudo cargar la cita. Por favor, inténtalo de nuevo.';

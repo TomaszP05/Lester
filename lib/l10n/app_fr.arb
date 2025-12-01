@@ -55,10 +55,103 @@
   "weeklyReflectionTitle": "Quiz de réflexion hebdomadaire",
   "startWeeklyReflection": "Commencer la réflexion hebdomadaire",
   "welcomeTitle": "Bienvenue chez Lester 🌸!",
-  "welcomeSubtitle": "Enregistrons comment vous vous sentez~ 🧧",
+  "welcomeSubtitle": "Enregistrons comment vous vous sentez",
   "quoteLoadError": "Impossible de charger la citation. Veuillez réessayer.",
   "weatherLoadError": "Impossible de charger la météo. Veuillez réessayer.",
   "quoteFallback": "Restez positif et continuez.",
   "unknownAuthor": "Inconnu",
-  "tryAgain": "Réessayer"
+  "tryAgain": "Réessayer",
+
+  "daily_challenge_1_name": "Défi Quotidien 1",
+  "daily_challenge_1_description": "Souris à cinq personnes aujourd'hui",
+
+  "daily_challenge_2_name": "Défi Quotidien 2",
+  "daily_challenge_2_description": "Envoie un message positif à quelqu'un qui t'est cher",
+
+  "daily_challenge_3_name": "Défi Quotidien 3",
+  "daily_challenge_3_description": "Fais une petite promenade dehors et apprécie la nature",
+
+  "daily_challenge_4_name": "Défi Quotidien 4",
+  "daily_challenge_4_description": "Fais une tâche ménagère que tu as repoussée",
+
+  "daily_challenge_5_name": "Défi Quotidien 5",
+  "daily_challenge_5_description": "Fais un compliment sincère à quelqu'un",
+
+  "daily_challenge_6_name": "Défi Quotidien 6",
+  "daily_challenge_6_description": "Bois au moins 8 verres d'eau aujourd'hui",
+
+  "daily_challenge_7_name": "Défi Quotidien 7",
+  "daily_challenge_7_description": "Écris un mot de remerciement à un ami",
+
+  "daily_challenge_8_name": "Défi Quotidien 8",
+  "daily_challenge_8_description": "Tiens la porte à quelqu'un",
+
+  "daily_challenge_9_name": "Défi Quotidien 9",
+  "daily_challenge_9_description": "Fais un compliment à un inconnu",
+
+  "daily_challenge_10_name": "Défi Quotidien 10",
+  "daily_challenge_10_description": "Prends une photo de fleur et télécharge une photo !",
+
+  "daily_challenge_11_name": "Défi Quotidien 11",
+  "daily_challenge_11_description": "Écoute ta chanson préférée sans rien faire d'autre",
+
+  "daily_challenge_12_name": "Défi Quotidien 12",
+  "daily_challenge_12_description": "Essaie un nouvel aliment ou une nouvelle boisson que tu n'as jamais goûté(e)",
+
+  "daily_challenge_13_name": "Défi Quotidien 13",
+  "daily_challenge_13_description": "Envoie un gentil message à un membre de ta famille",
+
+  "daily_challenge_14_name": "Défi Quotidien 14",
+  "daily_challenge_14_description": "Ramasse un déchet que tu trouves dehors",
+
+  "daily_challenge_15_name": "Défi Quotidien 15",
+  "daily_challenge_15_description": "Passe 10 minutes à t'étirer ou à méditer",
+
+  "daily_challenge_16_name": "Défi Quotidien 16",
+  "daily_challenge_16_description": "Fais don d'un objet que tu n'utilises plus",
+
+  "daily_challenge_17_name": "Défi Quotidien 17",
+  "daily_challenge_17_description": "Fais un compliment sincère à quelqu'un",
+
+  "daily_challenge_18_name": "Défi Quotidien 18",
+  "daily_challenge_18_description": "Écris trois choses pour lesquelles tu es reconnaissant(e)",
+
+  "daily_challenge_19_name": "Défi Quotidien 19",
+  "daily_challenge_19_description": "Appelle ou fais un appel vidéo avec un être cher",
+
+  "daily_challenge_20_name": "Défi Quotidien 20",
+  "daily_challenge_20_description": "Partage une citation inspirante sur les réseaux sociaux",
+
+  "daily_challenge_21_name": "Défi Quotidien 21",
+  "daily_challenge_21_description": "Prends en photo quelque chose qui te rend heureux/heureuse",
+
+  "daily_challenge_22_name": "Défi Quotidien 22",
+  "daily_challenge_22_description": "Passe une heure sans ton téléphone ni ton ordinateur",
+
+  "daily_challenge_23_name": "Défi Quotidien 23",
+  "daily_challenge_23_description": "Aide quelqu'un sans rien attendre en retour",
+
+  "daily_challenge_24_name": "Défi Quotidien 24",
+  "daily_challenge_24_description": "Cuisine ou prépare un repas sain",
+
+  "daily_challenge_25_name": "Défi Quotidien 25",
+  "daily_challenge_25_description": "Laisse un avis positif pour une petite entreprise",
+
+  "daily_challenge_26_name": "Défi Quotidien 26",
+  "daily_challenge_26_description": "Passe 15 minutes à écrire dans un journal ou à réfléchir",
+
+  "daily_challenge_27_name": "Défi Quotidien 27",
+  "daily_challenge_27_description": "Dis « merci » à quelqu'un qui t'aide aujourd'hui",
+
+  "daily_challenge_28_name": "Défi Quotidien 28",
+  "daily_challenge_28_description": "Lis ou écoute quelque chose d'édifiant",
+
+  "daily_challenge_29_name": "Défi Quotidien 29",
+  "daily_challenge_29_description": "Fais un acte de gentillesse au hasard de manière anonyme",
+
+  "daily_challenge_30_name": "Défi Quotidien 30",
+  "daily_challenge_30_description": "Passe 10 minutes à organiser ton espace",
+
+  "daily_challenge_31_name": "Défi Quotidien 31",
+  "daily_challenge_31_description": "Réfléchis au mois – de quoi es-tu fier/fière ?"
 }
