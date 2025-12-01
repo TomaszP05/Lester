@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../l10n/app_localizations.dart';
@@ -12,7 +11,6 @@ class InsightsWidget extends StatefulWidget {
 }
 
 class _InsightsWidgetState extends State<InsightsWidget> {
-  // Toronto, ON coordinates
   static const double _latitude = 43.6532;
   static const double _longitude = -79.3832;
   static const String _locationLabel = 'Toronto, ON'; // Consider localizing if needed
@@ -33,9 +31,9 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     final weatherFuture = http.get(
       Uri.parse(
         'https://api.open-meteo.com/v1/forecast'
-        '?latitude=$_latitude'
-        '&longitude=$_longitude'
-        '&current_weather=true',
+            '?latitude=$_latitude'
+            '&longitude=$_longitude'
+            '&current_weather=true',
       ),
     );
 
@@ -52,17 +50,21 @@ class _InsightsWidgetState extends State<InsightsWidget> {
       throw Exception(AppLocalizations.of(context)?.weatherLoadError ?? 'Could not load weather. Please try again.');
     }
 
-    final quoteData = jsonDecode(quoteResponse.body) as Map<String, dynamic>;
-    final weatherData = jsonDecode(weatherResponse.body) as Map<String, dynamic>;
-    final currentWeather =
-        weatherData['current_weather'] as Map<String, dynamic>? ?? {};
-    final temperature =
-        (currentWeather['temperature'] as num?)?.toDouble() ?? 0;
+    final quoteData = jsonDecode(quoteResponse.body);
+    final weatherData = jsonDecode(weatherResponse.body);
+
+    final currentWeather = weatherData['current_weather'] ?? {};
+    final temperature = (currentWeather['temperature'] as num?)?.toDouble() ?? 0;
     final weatherCode = (currentWeather['weathercode'] as num?)?.toInt();
 
     return _InsightsData(
+<<<<<<< HEAD
       quote: quoteData['content'] as String? ?? (AppLocalizations.of(context)?.quoteFallback ?? 'Stay positive and keep going.'),
       author: quoteData['author'] as String? ?? (AppLocalizations.of(context)?.unknownAuthor ?? 'Unknown'),
+=======
+      quote: quoteData['content'] ?? 'Stay positive and keep going.',
+      author: quoteData['author'] ?? 'Unknown',
+>>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
       temperature: temperature,
       weatherDescription: _weatherDescription(weatherCode),
       weatherCode: weatherCode,
@@ -75,20 +77,24 @@ class _InsightsWidgetState extends State<InsightsWidget> {
     return FutureBuilder<_InsightsData>(
       future: _insightsFuture,
       builder: (context, snapshot) {
+        // Loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        // Error state
         if (snapshot.hasError) {
+          final bool dark = Theme.of(context).brightness == Brightness.dark;
+
           return _InsightsCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   snapshot.error.toString(),
-                  style: const TextStyle(color: Colors.redAccent),
+                  style: TextStyle(color: dark ? Colors.redAccent : Colors.red),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 TextButton.icon(
                   onPressed: () {
                     setState(() {
@@ -96,34 +102,51 @@ class _InsightsWidgetState extends State<InsightsWidget> {
                     });
                   },
                   icon: const Icon(Icons.refresh),
+<<<<<<< HEAD
                   label: Text(AppLocalizations.of(context)?.tryAgain ?? 'Try again'),
+=======
+                  label: Text(
+                    'Try again',
+                    style: TextStyle(color: dark ? Colors.tealAccent : Colors.teal),
+                  ),
+>>>>>>> 6a8e153ce9f52afd6b797bdf7f9d3a20ebf39fbe
                 ),
               ],
             ),
           );
         }
 
+        // Data loaded
         final data = snapshot.data!;
+        final bool dark = Theme.of(context).brightness == Brightness.dark;
 
         return _InsightsCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _WeatherRow(data: data),
-              const Divider(height: 32),
+
+              Divider(
+                height: 32,
+                color: dark ? Colors.white24 : Colors.black26,
+              ),
+
               Text(
                 '"${data.quote}"',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
+                  color: dark ? Colors.white : Colors.black,
                 ),
               ),
+
               const SizedBox(height: 12),
+
               Text(
                 '- ${data.author}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.teal,
+                  color: dark ? Colors.tealAccent : Colors.teal,
                 ),
               ),
             ],
@@ -140,104 +163,34 @@ class _InsightsWidgetState extends State<InsightsWidget> {
       2: 'Partly cloudy',
       3: 'Overcast',
       45: 'Foggy',
-      48: 'Depositing rime fog',
+      48: 'Rime fog',
       51: 'Light drizzle',
-      53: 'Moderate drizzle',
-      55: 'Dense drizzle',
+      53: 'Drizzle',
+      55: 'Heavy drizzle',
       61: 'Light rain',
-      63: 'Moderate rain',
+      63: 'Rain',
       65: 'Heavy rain',
       71: 'Light snow',
-      73: 'Moderate snow',
+      73: 'Snow',
       75: 'Heavy snow',
-      80: 'Rain showers',
-      81: 'Moderate showers',
-      82: 'Violent showers',
+      80: 'Showers',
+      81: 'Rain showers',
+      82: 'Heavy showers',
     };
-
     return descriptions[code] ?? 'Weather update';
   }
 }
 
-// Weather utility functions
+// ----------- Helpers -----------
+
 IconData _weatherIcon(int? code) {
   if (code == null) return Icons.wb_sunny;
-
-  // Clear or mainly clear - sunny
-  if (code == 0 || code == 1) {
-    return Icons.wb_sunny;
-  }
-  // Partly cloudy
-  if (code == 2) {
-    return Icons.cloud_queue;
-  }
-  // Overcast - cloudy
-  if (code == 3) {
-    return Icons.wb_cloudy;
-  }
-  // Fog
-  if (code == 45 || code == 48) {
-    return Icons.foggy;
-  }
-  // Drizzle or rain
-  if (code >= 51 && code <= 65) {
-    return Icons.umbrella;
-  }
-  // Snow
-  if (code >= 71 && code <= 77) {
-    return Icons.ac_unit;
-  }
-  // Rain showers
-  if (code >= 80 && code <= 82) {
-    return Icons.grain;
-  }
-  // Thunderstorm (codes 95-99)
-  if (code >= 95 && code <= 99) {
-    return Icons.thunderstorm;
-  }
-
-  // Default fallback
+  if (code == 0 || code == 1) return Icons.wb_sunny;
+  if (code == 2) return Icons.cloud_queue;
+  if (code == 3) return Icons.wb_cloudy;
+  if (code >= 51 && code <= 65) return Icons.umbrella;
+  if (code >= 71 && code <= 82) return Icons.ac_unit;
   return Icons.wb_sunny;
-}
-
-Color _weatherIconColor(int? code) {
-  if (code == null) return Colors.orangeAccent;
-
-  // Clear or mainly clear - sunny (orange/yellow)
-  if (code == 0 || code == 1) {
-    return Colors.orangeAccent;
-  }
-  // Partly cloudy (light blue)
-  if (code == 2) {
-    return Colors.lightBlueAccent;
-  }
-  // Overcast - cloudy (gray)
-  if (code == 3) {
-    return Colors.grey;
-  }
-  // Fog (light gray)
-  if (code == 45 || code == 48) {
-    return Colors.grey;
-  }
-  // Drizzle or rain (blue)
-  if (code >= 51 && code <= 65) {
-    return Colors.blueAccent;
-  }
-  // Snow (light blue/cyan)
-  if (code >= 71 && code <= 77) {
-    return Colors.lightBlue;
-  }
-  // Rain showers (blue)
-  if (code >= 80 && code <= 82) {
-    return Colors.blueAccent;
-  }
-  // Thunderstorm (dark blue/purple)
-  if (code >= 95 && code <= 99) {
-    return Colors.deepPurpleAccent;
-  }
-
-  // Default fallback
-  return Colors.orangeAccent;
 }
 
 class _InsightsData {
@@ -265,28 +218,32 @@ class _InsightsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFB2F1E4),
-            Color(0xFFE4F9F5),
-          ],
+        gradient: LinearGradient(
+          colors: dark
+              ? [Color(0xFF2C2C2C), Color(0xFF3A3A3A)]
+              : [Color(0xFFB2F1E4), Color(0xFFE4F9F5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: dark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: child,
+      child: DefaultTextStyle(
+        style: TextStyle(color: dark ? Colors.white : Colors.black87),
+        child: child,
+      ),
     );
   }
 }
@@ -298,42 +255,30 @@ class _WeatherRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: dark ? Colors.white.withOpacity(0.12) : Colors.white.withOpacity(0.6),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
             _weatherIcon(data.weatherCode),
             size: 32,
-            color: _weatherIconColor(data.weatherCode),
+            color: dark ? Colors.tealAccent : Colors.blueGrey,
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                data.locationLabel,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '${data.temperature.toStringAsFixed(0)}°C • ${data.weatherDescription}',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
-              ),
-            ],
+          child: Text(
+            '${data.locationLabel} • ${data.temperature.toStringAsFixed(0)}°C • ${data.weatherDescription}',
+            style: TextStyle(
+              fontSize: 15,
+              color: dark ? Colors.white70 : Colors.black87,
+            ),
           ),
         ),
       ],
