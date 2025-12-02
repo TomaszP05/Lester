@@ -134,7 +134,7 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          loc?.welcomeSubtitle ?? "Let's log how you're feeling~ 🧧",
+                          loc?.welcomeSubtitle ?? "Let's log how you're feeling~ 🫧",
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black54,
