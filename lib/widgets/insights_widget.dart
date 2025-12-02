@@ -172,8 +172,6 @@ class _InsightsWidgetState extends State<InsightsWidget> {
   }
 }
 
-// ----------- Helpers -----------
-
 IconData _weatherIcon(int? code) {
   if (code == null) return Icons.wb_sunny;
   if (code == 0 || code == 1) return Icons.wb_sunny;

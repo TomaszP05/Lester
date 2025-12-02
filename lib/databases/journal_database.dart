@@ -1,7 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// Model that represents a single journal submission.
 class JournalEntry {
   final int? id;
   final String thoughts;
@@ -52,7 +51,6 @@ class JournalEntry {
   }
 }
 
-/// Handles all SQLite interaction for the journal feature.
 class JournalDatabase {
   JournalDatabase._();
   static final JournalDatabase instance = JournalDatabase._();
@@ -85,7 +83,6 @@ class JournalDatabase {
     return db;
   }
 
-  // Pre-set journal entries to populate on first launch.
   Future<void> _ensurePresetEntries(Database db) async {
     for (final entry in _presetEntries()) {
       final countResult = await db.query(

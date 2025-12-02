@@ -15,7 +15,6 @@ final ValueNotifier<Locale?> _localeNotifier = ValueNotifier<Locale?>(null);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Allow HTTP connections in debug mode (for insights widget)
   if (!kReleaseMode) {
     HttpOverrides.global = _PermissiveHttpOverrides();
   }
