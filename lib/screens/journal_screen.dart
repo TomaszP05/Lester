@@ -40,6 +40,55 @@ class JournalScreenState extends State<JournalScreen> {
     await _loadEntries();
   }
 
+  Future<void> _editEntry(JournalEntry entry) async {
+    final result = await Navigator.of(context).push<JournalEntry>(
+      MaterialPageRoute(
+        builder: (_) => JournalEntryFormPage(entry: entry),
+      ),
+    );
+    if (result == null) return;
+    await _database.updateEntry(result);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Journal entry updated')),
+    );
+    await _loadEntries();
+  }
+
+  Future<void> _deleteEntry(JournalEntry entry) async {
+    if (entry.id == null) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Entry'),
+        content: const Text(
+          'Are you sure you want to delete this journal entry? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    await _database.deleteEntry(entry.id!);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Journal entry deleted')),
+    );
+    await _loadEntries();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -67,7 +116,11 @@ class JournalScreenState extends State<JournalScreen> {
               itemCount: _entries.length,
               itemBuilder: (context, index) {
                 final entry = _entries[index];
-                return _JournalEntryCard(entry: entry);
+                return _JournalEntryCard(
+                  entry: entry,
+                  onEdit: () => _editEntry(entry),
+                  onDelete: () => _deleteEntry(entry),
+                );
               },
             ),
     );
@@ -75,8 +128,14 @@ class JournalScreenState extends State<JournalScreen> {
 }
 
 class _JournalEntryCard extends StatelessWidget {
-  const _JournalEntryCard({required this.entry});
+  const _JournalEntryCard({
+    required this.entry,
+    required this.onEdit,
+    required this.onDelete,
+  });
   final JournalEntry entry;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
   String _formatDate(DateTime date) {
     const months = [
       'Jan',
@@ -140,7 +199,23 @@ class _JournalEntryCard extends StatelessWidget {
                     color: dateColor,
                   ),
                 ),
-                const Icon(Icons.bookmark, color: Colors.teal),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 20),
+                      color: Colors.teal,
+                      onPressed: onEdit,
+                      tooltip: 'Edit entry',
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, size: 20),
+                      color: Colors.red.shade400,
+                      onPressed: onDelete,
+                      tooltip: 'Delete entry',
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -161,16 +236,28 @@ class _JournalEntryCard extends StatelessWidget {
 }
 
 class JournalEntryFormPage extends StatefulWidget {
-  const JournalEntryFormPage({super.key});
+  const JournalEntryFormPage({super.key, this.entry});
+  final JournalEntry? entry;
   @override
   State<JournalEntryFormPage> createState() => _JournalEntryFormPageState();
 }
 
 class _JournalEntryFormPageState extends State<JournalEntryFormPage> {
   final _formKey = GlobalKey<FormState>();
-  final _thoughtsController = TextEditingController();
-  final _feelingsController = TextEditingController();
-  final _accomplishmentsController = TextEditingController();
+  late final TextEditingController _thoughtsController;
+  late final TextEditingController _feelingsController;
+  late final TextEditingController _accomplishmentsController;
+
+  @override
+  void initState() {
+    super.initState();
+    _thoughtsController = TextEditingController(text: widget.entry?.thoughts ?? '');
+    _feelingsController = TextEditingController(text: widget.entry?.feelings ?? '');
+    _accomplishmentsController = TextEditingController(
+      text: widget.entry?.accomplishments ?? '',
+    );
+  }
+
   @override
   void dispose() {
     _thoughtsController.dispose();
@@ -182,10 +269,11 @@ class _JournalEntryFormPageState extends State<JournalEntryFormPage> {
   void _save() {
     if (!_formKey.currentState!.validate()) return;
     final entry = JournalEntry(
+      id: widget.entry?.id,
       thoughts: _thoughtsController.text.trim(),
       feelings: _feelingsController.text.trim(),
       accomplishments: _accomplishmentsController.text.trim(),
-      createdAt: DateTime.now(),
+      createdAt: widget.entry?.createdAt ?? DateTime.now(),
     );
     Navigator.of(context).pop(entry);
   }
@@ -193,7 +281,9 @@ class _JournalEntryFormPageState extends State<JournalEntryFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New Journal Entry')),
+      appBar: AppBar(
+        title: Text(widget.entry == null ? 'New Journal Entry' : 'Edit Journal Entry'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(

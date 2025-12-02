@@ -136,4 +136,26 @@ class JournalDatabase {
     final db = await database;
     return db.insert('journal_entries', entry.toMap());
   }
+
+  Future<int> updateEntry(JournalEntry entry) async {
+    final db = await database;
+    if (entry.id == null) {
+      throw Exception('Cannot update entry without an id');
+    }
+    return db.update(
+      'journal_entries',
+      entry.toMap(),
+      where: 'id = ?',
+      whereArgs: [entry.id],
+    );
+  }
+
+  Future<int> deleteEntry(int id) async {
+    final db = await database;
+    return db.delete(
+      'journal_entries',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }
