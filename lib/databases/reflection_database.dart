@@ -7,6 +7,15 @@ class ReflectionEntry {
   final double productivity;
   final String moodEmoji;
   final DateTime date;
+  final String weekSentence;
+  final String remember;
+  final String smile;
+  final String showedKindness;
+  final String feltMostYourselfDay;
+  final String completedTasksOption;
+  final double satisfaction;
+  final String newThing;
+  final String insight;
 
   ReflectionEntry({
     this.id,
@@ -14,6 +23,15 @@ class ReflectionEntry {
     required this.productivity,
     required this.moodEmoji,
     required this.date,
+    required this.weekSentence,
+    required this.remember,
+    required this.smile,
+    required this.showedKindness,
+    required this.feltMostYourselfDay,
+    required this.completedTasksOption,
+    required this.satisfaction,
+    required this.newThing,
+    required this.insight,
   });
 
   Map<String, dynamic> toMap() => {
@@ -22,6 +40,15 @@ class ReflectionEntry {
     'productivity': productivity,
     'moodEmoji': moodEmoji,
     'date': date.toIso8601String(),
+    'weekSentence': weekSentence,
+    'remember': remember,
+    'smile': smile,
+    'showedKindness': showedKindness,
+    'feltMostYourselfDay': feltMostYourselfDay,
+    'completedTasksOption': completedTasksOption,
+    'satisfaction': satisfaction,
+    'newThing': newThing,
+    'insight': insight,
   };
 
   factory ReflectionEntry.fromMap(Map<String, dynamic> map) => ReflectionEntry(
@@ -30,6 +57,15 @@ class ReflectionEntry {
     productivity: map['productivity'],
     moodEmoji: map['moodEmoji'],
     date: DateTime.parse(map['date']),
+    weekSentence: map['weekSentence'],
+    remember: map['remember'],
+    smile: map['smile'],
+    showedKindness: map['showedKindness'],
+    feltMostYourselfDay: map['feltMostYourselfDay'],
+    completedTasksOption: map['completedTasksOption'],
+    satisfaction: map['satisfaction'],
+    newThing: map['newThing'],
+    insight: map['insight'],
   );
 }
 
@@ -58,7 +94,16 @@ class ReflectionDatabase {
       actOfKindness TEXT,
       productivity REAL,
       moodEmoji TEXT,
-      date TEXT
+      date TEXT,
+      weekSentence TEXT,
+      remember TEXT,
+      smile TEXT,
+      showedKindness TEXT,
+      feltMostYourselfDay TEXT,
+      completedTasksOption TEXT,
+      satisfaction REAL,
+      newThing TEXT,
+      insight TEXT
     )
     ''');
   }
