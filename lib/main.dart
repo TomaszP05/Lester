@@ -7,6 +7,7 @@ import 'screens/home_screen.dart';
 import 'screens/challenges_screen.dart';
 import 'screens/journal_screen.dart';
 import 'screens/mood_screen.dart';
+import 'screens/quiz_history_screen.dart';
 import 'notifications/challenges_notifications.dart';
 
 final ValueNotifier<Locale?> _localeNotifier = ValueNotifier<Locale?>(null);
@@ -323,6 +324,45 @@ class SettingsScreen extends StatelessWidget {
             subtitle: Text(loc?.testNotificationSubtitle ?? 'Test your notification settings'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () => _sendTestNotification(context),
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Quiz Settings
+        Text(
+          "Quiz History",
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: const Icon(
+              Icons.history,
+              color: Colors.teal,
+              size: 28,
+            ),
+            title: const Text(
+              "View Past Quiz Answers",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            subtitle: const Text("Review your previous quiz submissions"),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const QuizHistoryScreen()),
+              );
+            },
           ),
         ),
       ],
